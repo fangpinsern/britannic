@@ -1,8 +1,6 @@
 const { Router, json } = require("express");
-const { loginController } = require("../controllers/auth/login.controller");
-const {
-  registerController,
-} = require("../controllers/auth/register.controller");
+
+const authRouter = require("./auth.routes");
 
 const router = Router();
 router.use(json());
@@ -11,7 +9,6 @@ router.get("/ping", (req, res, next) => {
   return res.send("Successfully inside routes");
 });
 
-router.post("/login", loginController);
-router.post("/register", registerController);
+router.use("/auth", authRouter);
 
 module.exports = router;
