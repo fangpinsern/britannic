@@ -29,9 +29,10 @@ const registerController = async (req, res, next) => {
     token = jwt.sign(
       {
         user: {
-          id: newUser._id,
-          username: newUser.username,
-          email: newUser.email,
+          id: user._id,
+          username: user.username,
+          email: user.email,
+          isAdmin: user.isAdmin,
         },
       },
       JWT_SECRET_KEY,

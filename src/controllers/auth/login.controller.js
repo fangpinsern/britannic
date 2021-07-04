@@ -21,14 +21,14 @@ const loginController = async (req, res, next) => {
   console.log("INFO - Finding user with username", username);
 
   console.log("INFO - Checking if password is correct");
-  let correctPassword = false;
+  let validUser = false;
   try {
-    correctPassword = await authenticateUser(username, password);
+    validUser = await authenticateUser(username, password);
   } catch (err) {
     return next(err);
   }
 
-  if (!correctPassword) {
+  if (!validUser) {
     console.log("ERROR - Invalid password provided for username", username);
     const message = "Incorrect Username or Password";
     const err = errorFormatter(message, UNAUTHORIZED);
@@ -37,14 +37,19 @@ const loginController = async (req, res, next) => {
 
   console.log("INFO - Pasword correct");
 
-  const user = correctPassword;
+  const user = validUser;
 
   console.log("INFO - Creating jwt token");
   let token;
   try {
     token = jwt.sign(
       {
-        user: { id: user._id, username: user.username, email: user.email },
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+          isAdmin: user.isAdmin,
+        },
       },
       JWT_SECRET_KEY,
       { expiresIn: JWT_ACCESS_TOKEN_EXPIRES }
