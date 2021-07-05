@@ -1,10 +1,11 @@
-const { INTERNAL_SERVER_ERROR, CREATED, BAD_REQUEST } = require("http-status");
+const { CREATED, BAD_REQUEST } = require("http-status");
 const jwt = require("jsonwebtoken");
 const {
   JWT_SECRET_KEY,
   JWT_ACCESS_TOKEN_EXPIRES,
 } = require("../../config/config.development");
-const { createUser } = require("../../services/users.service");
+const { createUser, getUser } = require("../../services/users.service");
+const { errorFormatter } = require("../../utils/errorFormatter");
 
 const registerController = async (req, res, next) => {
   const body = req.body;
@@ -13,7 +14,20 @@ const registerController = async (req, res, next) => {
   const username = body.username;
   const password = body.password;
 
-  // Check if user exist
+  let userExist = false;
+  try {
+    const emailExist = await getUser({ email });
+    const usernameExist = await getUser({ username });
+    userExist = emailExist || usernameExist;
+  } catch (err) {
+    return next(err);
+  }
+
+  if (userExist) {
+    const message = "User exist. Please use a different email or username";
+    const err = errorFormatter(message, BAD_REQUEST);
+    return next(err);
+  }
 
   console.log("INFO - Creating new user");
 

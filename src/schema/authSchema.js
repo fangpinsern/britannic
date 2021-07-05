@@ -6,7 +6,7 @@ const loginSchema = yup.object().shape({
 });
 
 const signupSchema = yup.object().shape({
-  email: yup.string().required(),
+  email: yup.string().email().required(),
   username: yup.string().required(),
   password: yup.string().required(),
 });
