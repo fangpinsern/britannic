@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const { NOT_FOUND, INTERNAL_SERVER_ERROR } = require("http-status");
 
 const routes = require("./src/routes");
@@ -35,21 +35,21 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Listening on ${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Listening on ${PORT}`);
+// });
 
-// mongoose
-//   .connect(DB_URL, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useCreateIndex: true,
-//   })
-//   .then(() => {
-//     app.listen(PORT, () => {
-//       console.log(`Listening on ${PORT}`);
-//     });
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
+mongoose
+  .connect(DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Listening on ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
