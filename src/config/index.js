@@ -11,4 +11,5 @@ if (env === "production") {
 module.exports = {
   DB_URL: process.env.DB_URL,
   ...envVariables,
+  DUMMY_AUTH: process.env.DUMMY_AUTH,
 };

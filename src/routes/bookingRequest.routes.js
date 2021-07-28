@@ -5,6 +5,7 @@ const {
 const {
   createBookingRequestController,
 } = require("../controllers/bookingRequest/createBookingRequest.controller");
+const { dummyAuthMiddleware } = require("../middlewares/dummyAuth.middleware");
 const {
   bookingRequestSchema,
   approveBookingRequestSchema,
@@ -27,6 +28,7 @@ router.post(
 
 router.post(
   "/approve",
+  dummyAuthMiddleware,
   validationHelper(approveBookingRequestSchema, "body"),
   approveBookingRequestController
 );
