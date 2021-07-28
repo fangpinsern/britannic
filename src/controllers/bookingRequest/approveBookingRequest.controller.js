@@ -26,6 +26,22 @@ const approveBookingRequestController = async (req, res, next) => {
   const date = bookingRequest.date;
   const bookingTimeSlots = bookingRequest.timingSlots;
   const notes = bookingRequest.notes;
+  const isApproved = bookingRequest.isApproved;
+  const isRejected = bookingRequest.isRejected;
+
+  if (isApproved) {
+    const message =
+      "Booking request has already been approved. You cannot reApprove it";
+    const err = errorFormatter(message, BAD_REQUEST);
+    return next(err);
+  }
+
+  if (isRejected) {
+    const message =
+      "Booking request has already been rejected. You cannot approve a rejected request";
+    const err = errorFormatter(message, BAD_REQUEST);
+    return next(err);
+  }
 
   let isVenueAvailable;
   try {
