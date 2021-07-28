@@ -8,13 +8,14 @@
 const { BAD_REQUEST, ACCEPTED } = require("http-status");
 const BookingRequest = require("../../models/bookingRequest.model");
 const Venue = require("../../models/venue.model");
+const { convertDateStringToUnix } = require("../../utils/dateToUnix");
 
 const createBookingRequestController = async (req, res, next) => {
   const body = req.body;
   const email = body.email;
   const venueId = body.venueId;
   const date = body.date;
-  const slots = body.slots;
+  const timingSlots = body.timingSlots;
   const notes = body.notes;
 
   let isVenueIdValid;
@@ -30,11 +31,29 @@ const createBookingRequestController = async (req, res, next) => {
     return next(err);
   }
 
-  //   const bookingRequest = new BookingRequest({
-  //       email: email,
-  //       venue: venueId,
-  //       date:
-  //   })
+  let dateToUnix;
+  try {
+    dateToUnix = convertDateStringToUnix(date);
+  } catch (err) {
+    next(err);
+  }
 
-  //   return res.status(ACCEPTED).json({bookingId: })
+  const bookingRequest = new BookingRequest({
+    email: email,
+    venue: venueId,
+    date: dateToUnix,
+    timingSlots: timingSlots,
+    notes: notes,
+  });
+
+  let savedBookingRequest;
+  try {
+    savedBookingRequest = await bookingRequest.save();
+  } catch (err) {
+    return next(err);
+  }
+
+  return res.status(ACCEPTED).json({ bookingId: savedBookingRequest.id });
 };
+
+module.exports = { createBookingRequestController };

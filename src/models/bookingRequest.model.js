@@ -5,7 +5,7 @@ const BookingReqSchema = new Schema(
     email: { type: String, required: true },
     venue: { type: Types.ObjectId, ref: "VenueSchema", required: true },
     date: { type: Number, required: true },
-    slots: { type: [Number], required: true },
+    timingSlots: { type: [Number], required: true },
     isApproved: { type: Boolean, required: true, default: false },
     isRejected: { type: Boolean, required: true, default: false },
     notes: { type: String, maxLength: 500 },
