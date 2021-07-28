@@ -8,6 +8,7 @@ const VenueSchema = new Schema(
     priorityEmails: { type: [String] },
     description: { type: String, maxLength: 500 },
     visible: { type: Boolean, default: true, required: true },
+    image: { type: String, required: false },
   },
   {
     collection: "venues",
