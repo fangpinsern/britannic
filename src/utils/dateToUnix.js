@@ -25,9 +25,9 @@ const convertUnixToDateString = (unix) => {
   const month = String(values.month);
   const day = String(values.day);
 
-  const dateString = year + month + day;
+  const newDateString = year + month + day;
 
-  return dateString;
+  return newDateString;
 };
 
 module.exports = { convertDateStringToUnix, convertUnixToDateString };

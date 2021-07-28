@@ -35,7 +35,7 @@ const createBookingRequestController = async (req, res, next) => {
   try {
     dateToUnix = convertDateStringToUnix(date);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 
   const bookingRequest = new BookingRequest({
