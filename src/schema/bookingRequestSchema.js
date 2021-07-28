@@ -12,4 +12,12 @@ const approveBookingRequestSchema = yup.object().shape({
   bookingRequestId: yup.string().required(),
 });
 
-module.exports = { bookingRequestSchema, approveBookingRequestSchema };
+const getBookingRequestSchema = yup.object().shape({
+  bookingRequestId: yup.string().required(),
+});
+
+module.exports = {
+  bookingRequestSchema,
+  approveBookingRequestSchema,
+  getBookingRequestSchema,
+};

@@ -121,7 +121,7 @@ const approveBookingRequestController = async (req, res, next) => {
   }
 
   return res.status(ACCEPTED).json({
-    bookingRequestIds: savedBookingRequest.id,
+    bookingRequestId: savedBookingRequest.id,
     bookingIds: newBookingIds,
     rejectedBookingRequestsIds: rejectedBookingRequestsIds,
   });
