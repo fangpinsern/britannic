@@ -1,32 +1,18 @@
-const { Schema, connection } = require("mongoose");
-const bcrypt = require("bcrypt");
+const { Schema, connection, Types } = require("mongoose");
 
-const UserSchema = new Schema(
+const VenueSchema = new Schema(
   {
-    name: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    isAdmin: { type: Boolean, required: true, default: false },
-    isApproved: { type: Boolean, required: true, default: false },
+    name: { type: String, required: true },
+    capacity: { type: Number, required: true },
+    openingHours: { type: String, required: true },
+    priorityEmails: { type: [String] },
+    description: { type: String, maxLength: 500 },
+    visible: { type: Boolean, default: true, required: true },
   },
   {
-    collection: "user",
+    collection: "venues",
     timestamps: true,
   }
 );
 
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-
-  try {
-    const hash = await bcrypt.hash(this.password, 12);
-    this.password = hash;
-    return next();
-  } catch (err) {
-    return next(err);
-  }
-});
-
-module.exports = connection.model("UserSchema", UserSchema);
+module.exports = connection.model("VenueSchema", VenueSchema);
