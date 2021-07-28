@@ -2,7 +2,19 @@ const { BAD_REQUEST, ACCEPTED } = require("http-status");
 const Booking = require("../../models/booking.model");
 const BookingRequest = require("../../models/bookingRequest.model");
 const { checkIfVenueAvailable } = require("../../services/booking.service");
+const {
+  rejectBookingRequestInTheseSlots,
+} = require("../../services/bookingRequest.service");
 const { errorFormatter } = require("../../utils/errorFormatter");
+
+// check if booking request exist
+// check if booking request is already approved
+// check if booking request is already rejected
+// check if venue is available for given timingSlots
+// make booking
+// approve booking request and save bookingIds to booking request
+// reject all booking request that conflict with this
+// return
 
 const approveBookingRequestController = async (req, res, next) => {
   const body = req.body;
@@ -90,7 +102,29 @@ const approveBookingRequestController = async (req, res, next) => {
     return next(err);
   }
 
-  return res.status(ACCEPTED).json({ bookingIds: newBookingIds });
+  // send email of approval
+
+  // reject all request that has this slot
+  let rejectedBookingRequestsIds = [];
+  try {
+    rejectedBookingRequestsIds = await rejectBookingRequestInTheseSlots(
+      venue,
+      date,
+      bookingTimeSlots,
+      savedBookingRequest.id
+    );
+  } catch (err) {
+    const message =
+      "Error occured after booking has been approved. Pls check console for more detailed error logs";
+    console.log(err);
+    return next(errorFormatter(message));
+  }
+
+  return res.status(ACCEPTED).json({
+    bookingRequestIds: savedBookingRequest.id,
+    bookingIds: newBookingIds,
+    rejectedBookingRequestsIds: rejectedBookingRequestsIds,
+  });
 };
 
 module.exports = { approveBookingRequestController };
