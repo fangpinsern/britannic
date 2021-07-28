@@ -8,7 +8,9 @@
 const { BAD_REQUEST, ACCEPTED } = require("http-status");
 const BookingRequest = require("../../models/bookingRequest.model");
 const Venue = require("../../models/venue.model");
+const { checkIfVenueAvailable } = require("../../services/booking.service");
 const { convertDateStringToUnix } = require("../../utils/dateToUnix");
+const { errorFormatter } = require("../../utils/errorFormatter");
 
 const createBookingRequestController = async (req, res, next) => {
   const body = req.body;
@@ -38,6 +40,24 @@ const createBookingRequestController = async (req, res, next) => {
     return next(err);
   }
 
+  let isVenueAvailable;
+  try {
+    isVenueAvailable = await checkIfVenueAvailable(
+      venueId,
+      dateToUnix,
+      timingSlots
+    );
+  } catch (err) {
+    return next(err);
+  }
+
+  if (!isVenueAvailable) {
+    const message =
+      "some slots for this venue is unavailable. Please try again or contact admin";
+    const err = errorFormatter(message, BAD_REQUEST);
+    return next(err);
+  }
+
   const bookingRequest = new BookingRequest({
     email: email,
     venue: venueId,
@@ -53,7 +73,9 @@ const createBookingRequestController = async (req, res, next) => {
     return next(err);
   }
 
-  return res.status(ACCEPTED).json({ bookingId: savedBookingRequest.id });
+  return res
+    .status(ACCEPTED)
+    .json({ bookingRequestId: savedBookingRequest.id });
 };
 
 module.exports = { createBookingRequestController };

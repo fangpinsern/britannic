@@ -8,6 +8,10 @@ const BookingReqSchema = new Schema(
     timingSlots: { type: [Number], required: true },
     isApproved: { type: Boolean, required: true, default: false },
     isRejected: { type: Boolean, required: true, default: false },
+    bookingIds: {
+      type: [{ type: Types.ObjectId, ref: "BookingSchema" }],
+      required: false,
+    },
     notes: { type: String, maxLength: 500 },
   },
   {

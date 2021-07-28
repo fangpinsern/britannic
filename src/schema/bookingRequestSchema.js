@@ -8,4 +8,8 @@ const bookingRequestSchema = yup.object().shape({
   notes: yup.string(),
 });
 
-module.exports = { bookingRequestSchema };
+const approveBookingRequestSchema = yup.object().shape({
+  bookingRequestId: yup.string().required(),
+});
+
+module.exports = { bookingRequestSchema, approveBookingRequestSchema };

@@ -1,8 +1,14 @@
 const { Router, json } = require("express");
 const {
+  approveBookingRequestController,
+} = require("../controllers/bookingRequest/approveBookingRequest.controller");
+const {
   createBookingRequestController,
 } = require("../controllers/bookingRequest/createBookingRequest.controller");
-const { bookingRequestSchema } = require("../schema/bookingRequestSchema");
+const {
+  bookingRequestSchema,
+  approveBookingRequestSchema,
+} = require("../schema/bookingRequestSchema");
 const { validationHelper } = require("../utils/requestValidationTool");
 
 const router = Router();
@@ -17,6 +23,12 @@ router.post(
   "/",
   validationHelper(bookingRequestSchema, "body"),
   createBookingRequestController
+);
+
+router.post(
+  "/approve",
+  validationHelper(approveBookingRequestSchema, "body"),
+  approveBookingRequestController
 );
 
 module.exports = router;
