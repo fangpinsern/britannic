@@ -53,7 +53,9 @@ const createBookingRequestController = async (req, res, next) => {
     return next(err);
   }
 
-  return res.status(ACCEPTED).json({ bookingId: savedBookingRequest.id });
+  return res
+    .status(ACCEPTED)
+    .json({ bookingRequestId: savedBookingRequest.id });
 };
 
 module.exports = { createBookingRequestController };
