@@ -1,5 +1,5 @@
 const timingSlotNumberToTimingMapping = {
-  1: "7am -  7.30am",
+  1: "7am - 7.30am",
   2: "7.30am - 8am",
   3: "8am - 8.30am",
   4: "8.30am - 9am",

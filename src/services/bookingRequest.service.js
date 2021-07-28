@@ -22,7 +22,7 @@ const rejectBookingRequestInTheseSlots = async (
     if (request.id.toString() === except) {
       continue;
     }
-    if (isRejected) {
+    if (request.isRejected) {
       continue;
     }
     request.isRejected = true;
