@@ -1,6 +1,7 @@
 const { BAD_REQUEST, ACCEPTED } = require("http-status");
 const Booking = require("../../models/booking.model");
 const BookingRequest = require("../../models/bookingRequest.model");
+const { checkIfVenueAvailable } = require("../../services/booking.service");
 const { errorFormatter } = require("../../utils/errorFormatter");
 
 const approveBookingRequestController = async (req, res, next) => {
@@ -25,6 +26,23 @@ const approveBookingRequestController = async (req, res, next) => {
   const date = bookingRequest.date;
   const bookingTimeSlots = bookingRequest.timingSlots;
   const notes = bookingRequest.notes;
+
+  let isVenueAvailable;
+  try {
+    isVenueAvailable = await checkIfVenueAvailable(
+      venue,
+      date,
+      bookingTimeSlots
+    );
+  } catch (err) {
+    return next(err);
+  }
+
+  if (!isVenueAvailable) {
+    const message = "some slots for this venue is unavailable";
+    const err = errorFormatter(message, BAD_REQUEST);
+    return next(err);
+  }
 
   const newBookingIds = [];
 
