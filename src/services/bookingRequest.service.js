@@ -1,4 +1,6 @@
+const { Types } = require("mongoose");
 const BookingRequest = require("../models/bookingRequest.model");
+const Venue = require("../models/venue.model");
 
 const rejectBookingRequestInTheseSlots = async (
   venueId,
@@ -6,15 +8,39 @@ const rejectBookingRequestInTheseSlots = async (
   timingSlots = [],
   except
 ) => {
-  const requestToReject = await BookingRequest.find({
-    venue: venueId,
-    date: unixDate,
-    timingSlots: { $in: timingSlots },
-  });
+  const venue = await Venue.findOne({ _id: venueId });
+
+  const isChildVenue = venue.isChildVenue;
+  console.log(venue.childVenues);
+
+  let searchQuery;
+  if (isChildVenue) {
+    searchQuery = {
+      venue: { $in: [venueId, venue.parentVenue] },
+      date: unixDate,
+      timingSlots: { $in: timingSlots },
+    };
+  } else {
+    searchQuery = {
+      venue: {
+        $in: [...venue.childVenues, venueId],
+      },
+      date: unixDate,
+      timingSlots: { $in: timingSlots },
+    };
+
+    console.log(searchQuery);
+  }
+
+  const requestToReject = await BookingRequest.find(searchQuery);
+
+  console.log(requestToReject);
 
   if (requestToReject.length <= 0) {
     return [];
   }
+
+  console.log(requestToReject);
 
   rejectedBookingRequestIds = [];
   for (let i = 0; i < requestToReject.length; i++) {
