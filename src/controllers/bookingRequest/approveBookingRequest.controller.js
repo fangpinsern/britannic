@@ -1,4 +1,4 @@
-const { BAD_REQUEST, ACCEPTED } = require("http-status");
+const { BAD_REQUEST, ACCEPTED, INTERNAL_SERVER_ERROR } = require("http-status");
 const Booking = require("../../models/booking.model");
 const BookingRequest = require("../../models/bookingRequest.model");
 const { checkIfVenueAvailable } = require("../../services/booking.service");
@@ -117,7 +117,7 @@ const approveBookingRequestController = async (req, res, next) => {
     const message =
       "Error occured after booking has been approved. Pls check console for more detailed error logs";
     console.log(err);
-    return next(errorFormatter(message));
+    return next(errorFormatter(message, INTERNAL_SERVER_ERROR));
   }
 
   return res.status(ACCEPTED).json({
