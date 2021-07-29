@@ -23,8 +23,6 @@ router.get("/ping", (req, res, next) => {
   return res.send("Successfully inside booking request routes");
 });
 
-router.get("/get", validationHelper());
-
 router.get(
   "/",
   validationHelper(getBookingRequestSchema, "query"),
