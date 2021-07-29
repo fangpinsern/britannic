@@ -11,7 +11,7 @@ const VenueSchema = new Schema(
     image: { type: String, required: false },
     parentVenue: { type: Types.ObjectId, ref: "VenueSchema" },
     isChildVenue: { type: Boolean, default: false, required: true },
-    childVenue: {
+    childVenues: {
       type: [{ type: Types.ObjectId, ref: "VenueSchema" }],
       required: false,
       default: [],

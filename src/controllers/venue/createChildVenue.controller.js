@@ -21,6 +21,7 @@ const createChildVenueController = async (req, res, next) => {
 
   const body = req.body;
   const name = body.name;
+  const capacity = body.capacity;
   const openingHours = findParentVenue.openingHours;
   const priorityEmails = findParentVenue.priorityEmails;
   const description = body.description || findParentVenue.description;
@@ -30,6 +31,7 @@ const createChildVenueController = async (req, res, next) => {
 
   const newChildVenue = new Venue({
     name: name,
+    capacity: capacity,
     openingHours: openingHours,
     priorityEmails: priorityEmails,
     description: description,
@@ -45,10 +47,10 @@ const createChildVenueController = async (req, res, next) => {
     return next(err);
   }
 
-  const childVenues = findParentVenue.childVenue;
+  const childVenues = findParentVenue.childVenues;
   childVenues.push(savedChildVenue.id);
 
-  findParentVenue.childVenue = childVenues;
+  findParentVenue.childVenues = childVenues;
 
   let savedParentVenue;
   try {
@@ -59,6 +61,8 @@ const createChildVenueController = async (req, res, next) => {
 
   return res.status(ACCEPTED).json({ venue: savedChildVenue.toObject() });
 };
+
+module.exports = { createChildVenueController };
 
 // name: { type: String, required: true },
 //     capacity: { type: Number, required: true },

@@ -1,12 +1,18 @@
 const { Router, json } = require("express");
 const {
+  createChildVenueController,
+} = require("../controllers/venue/createChildVenue.controller");
+const {
   createVenueController,
 } = require("../controllers/venue/createVenue.controller");
 const {
   getAllVenueController,
 } = require("../controllers/venue/getAllVenue.controller");
 const { dummyAuthMiddleware } = require("../middlewares/dummyAuth.middleware");
-const { createVenueSchema } = require("../schema/venueSchema");
+const {
+  createVenueSchema,
+  createChildVenueSchema,
+} = require("../schema/venueSchema");
 const { validationHelper } = require("../utils/requestValidationTool");
 
 const router = Router();
@@ -24,6 +30,13 @@ router.post(
   dummyAuthMiddleware,
   validationHelper(createVenueSchema, "body"),
   createVenueController
+);
+
+router.post(
+  "/childVenue/:parentId",
+  dummyAuthMiddleware,
+  validationHelper(createChildVenueSchema, "body"),
+  createChildVenueController
 );
 
 module.exports = router;
