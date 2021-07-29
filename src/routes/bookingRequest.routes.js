@@ -7,8 +7,12 @@ const {
 } = require("../controllers/bookingRequest/createBookingRequest.controller");
 const { dummyAuthMiddleware } = require("../middlewares/dummyAuth.middleware");
 const {
+  getBookingRequestInfo,
+} = require("../controllers/bookingRequest/getBookingRequestInfo.controller");
+const {
   bookingRequestSchema,
   approveBookingRequestSchema,
+  getBookingRequestSchema,
 } = require("../schema/bookingRequestSchema");
 const { validationHelper } = require("../utils/requestValidationTool");
 
@@ -20,10 +24,10 @@ router.get("/ping", (req, res, next) => {
   return res.send("Successfully inside booking request routes");
 });
 
-router.post(
+router.get(
   "/",
-  validationHelper(bookingRequestSchema, "body"),
-  createBookingRequestController
+  validationHelper(getBookingRequestSchema, "query"),
+  getBookingRequestInfo
 );
 
 router.post(
