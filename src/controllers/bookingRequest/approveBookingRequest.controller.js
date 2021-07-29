@@ -18,11 +18,11 @@ const { errorFormatter } = require("../../utils/errorFormatter");
 
 const approveBookingRequestController = async (req, res, next) => {
   const body = req.body;
-  const bookingRequstId = body.bookingRequestId;
+  const bookingRequestId = body.bookingRequestId;
 
   let bookingRequest;
   try {
-    bookingRequest = await BookingRequest.findOne({ _id: bookingRequstId });
+    bookingRequest = await BookingRequest.findOne({ _id: bookingRequestId });
   } catch (err) {
     return next(err);
   }
