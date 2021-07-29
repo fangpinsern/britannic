@@ -14,6 +14,7 @@ const VenueSchema = new Schema(
     childVenue: {
       type: [{ type: Types.ObjectId, ref: "VenueSchema" }],
       required: false,
+      default: [],
     },
   },
   {
