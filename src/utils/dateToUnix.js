@@ -1,8 +1,7 @@
 const { DateTime } = require("luxon");
 
 const convertDateStringToUnix = (dateString) => {
-  const date = DateTime.fromISO(dateString);
-  console.log(date);
+  const date = DateTime.fromISO(dateString, { zone: "utc" });
   if (date.invalid) {
     console.log(
       "ERROR - Invalid datestring. date string must be of this format [yyyymmdd]"
@@ -13,8 +12,7 @@ const convertDateStringToUnix = (dateString) => {
 };
 
 const convertUnixToDateString = (unix) => {
-  const dateString = DateTime.fromMillis(unix);
-  console.log(dateString);
+  const dateString = DateTime.fromMillis(unix, { zone: "utc" });
   if (dateString.invalid) {
     console.log(
       "ERROR - Invalid unix timestamp. unix time stamp number be a number"
