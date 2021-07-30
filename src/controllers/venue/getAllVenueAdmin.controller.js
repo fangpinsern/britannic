@@ -2,10 +2,10 @@ const { NOT_FOUND, OK } = require("http-status");
 const Venue = require("../../models/venue.model");
 const { errorFormatter } = require("../../utils/errorFormatter");
 
-const getAllVenueController = async (req, res, next) => {
+const getAllVenueAdminController = async (req, res, next) => {
   let allVenues;
   try {
-    allVenues = await Venue.find({ visible: true });
+    allVenues = await Venue.find();
   } catch (err) {
     return next(err);
   }
@@ -37,4 +37,4 @@ const getAllVenueController = async (req, res, next) => {
   return res.status(OK).json({ venues: returnVenue });
 };
 
-module.exports = { getAllVenueController };
+module.exports = { getAllVenueAdminController };

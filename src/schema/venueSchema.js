@@ -9,4 +9,8 @@ const createVenueSchema = yup.object().shape({
   image: yup.string(),
 });
 
-module.exports = { createVenueSchema };
+const updateVenueVisibilitySchema = yup.object().shape({
+  venueId: yup.string().required(),
+});
+
+module.exports = { createVenueSchema, updateVenueVisibilitySchema };
