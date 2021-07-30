@@ -15,6 +15,9 @@ const {
   getBookingRequestSchema,
 } = require("../schema/bookingRequestSchema");
 const { validationHelper } = require("../utils/requestValidationTool");
+const {
+  getAllBookingRequestController,
+} = require("../controllers/bookingRequest/getAllBookingRequest.controller");
 
 const router = Router();
 
@@ -24,11 +27,19 @@ router.get("/ping", (req, res, next) => {
   return res.send("Successfully inside booking request routes");
 });
 
+router.post(
+  "/",
+  validationHelper(bookingRequestSchema, "body"),
+  createBookingRequestController
+);
+
 router.get(
   "/",
   validationHelper(getBookingRequestSchema, "query"),
   getBookingRequestInfo
 );
+
+router.get("/all", dummyAuthMiddleware, getAllBookingRequestController);
 
 router.post(
   "/approve",
