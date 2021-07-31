@@ -1,4 +1,4 @@
-const { BAD_REQUEST, ACCEPTED } = require("http-status");
+const { BAD_REQUEST, ACCEPTED, INTERNAL_SERVER_ERROR } = require("http-status");
 const Booking = require("../../models/booking.model");
 const BookingRequest = require("../../models/bookingRequest.model");
 const { checkIfVenueAvailable } = require("../../services/booking.service");
@@ -18,11 +18,11 @@ const { errorFormatter } = require("../../utils/errorFormatter");
 
 const approveBookingRequestController = async (req, res, next) => {
   const body = req.body;
-  const bookingRequstId = body.bookingRequestId;
+  const bookingRequestId = body.bookingRequestId;
 
   let bookingRequest;
   try {
-    bookingRequest = await BookingRequest.findOne({ _id: bookingRequstId });
+    bookingRequest = await BookingRequest.findOne({ _id: bookingRequestId });
   } catch (err) {
     return next(err);
   }
@@ -117,11 +117,11 @@ const approveBookingRequestController = async (req, res, next) => {
     const message =
       "Error occured after booking has been approved. Pls check console for more detailed error logs";
     console.log(err);
-    return next(errorFormatter(message));
+    return next(errorFormatter(message, INTERNAL_SERVER_ERROR));
   }
 
   return res.status(ACCEPTED).json({
-    bookingRequestIds: savedBookingRequest.id,
+    bookingRequestId: savedBookingRequest.id,
     bookingIds: newBookingIds,
     rejectedBookingRequestsIds: rejectedBookingRequestsIds,
   });

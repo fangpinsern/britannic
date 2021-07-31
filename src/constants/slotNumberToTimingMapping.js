@@ -32,3 +32,5 @@ const timingSlotNumberToTimingMapping = {
   31: "10pm - 10.30pm",
   32: "10.30pm - 11pm",
 };
+
+module.exports = { timingSlotNumberToTimingMapping };

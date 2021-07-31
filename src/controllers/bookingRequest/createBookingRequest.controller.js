@@ -9,6 +9,10 @@ const { BAD_REQUEST, ACCEPTED } = require("http-status");
 const BookingRequest = require("../../models/bookingRequest.model");
 const Venue = require("../../models/venue.model");
 const { checkIfVenueAvailable } = require("../../services/booking.service");
+const {
+  sendMessageToChannel,
+  venueBookingRequestMessageBuilder,
+} = require("../../services/telegramBot.service");
 const { convertDateStringToUnix } = require("../../utils/dateToUnix");
 const { errorFormatter } = require("../../utils/errorFormatter");
 
@@ -19,10 +23,11 @@ const createBookingRequestController = async (req, res, next) => {
   const date = body.date;
   const timingSlots = body.timingSlots;
   const notes = body.notes;
+  const cca = body.cca;
 
   let isVenueIdValid;
   try {
-    isVenueIdValid = await Venue.findOne({ _id: venueId });
+    isVenueIdValid = await Venue.findOne({ _id: venueId, visible: true });
   } catch (err) {
     return next(err);
   }
@@ -64,13 +69,24 @@ const createBookingRequestController = async (req, res, next) => {
     date: dateToUnix,
     timingSlots: timingSlots,
     notes: notes,
+    cca: cca,
   });
 
   let savedBookingRequest;
   try {
     savedBookingRequest = await bookingRequest.save();
+    savedBookingRequest = await BookingRequest.findOne({
+      _id: savedBookingRequest.id,
+    }).populate("venue");
   } catch (err) {
     return next(err);
+  }
+
+  try {
+    const message = venueBookingRequestMessageBuilder(savedBookingRequest);
+    sendMessageToChannel(message);
+  } catch (err) {
+    console.log("Channel message not sent");
   }
 
   return res

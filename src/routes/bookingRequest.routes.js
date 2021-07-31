@@ -7,10 +7,17 @@ const {
 } = require("../controllers/bookingRequest/createBookingRequest.controller");
 const { dummyAuthMiddleware } = require("../middlewares/dummyAuth.middleware");
 const {
+  getBookingRequestInfo,
+} = require("../controllers/bookingRequest/getBookingRequestInfo.controller");
+const {
   bookingRequestSchema,
   approveBookingRequestSchema,
+  getBookingRequestSchema,
 } = require("../schema/bookingRequestSchema");
 const { validationHelper } = require("../utils/requestValidationTool");
+const {
+  getAllBookingRequestController,
+} = require("../controllers/bookingRequest/getAllBookingRequest.controller");
 
 const router = Router();
 
@@ -25,6 +32,14 @@ router.post(
   validationHelper(bookingRequestSchema, "body"),
   createBookingRequestController
 );
+
+router.get(
+  "/",
+  validationHelper(getBookingRequestSchema, "query"),
+  getBookingRequestInfo
+);
+
+router.get("/all", dummyAuthMiddleware, getAllBookingRequestController);
 
 router.post(
   "/approve",
