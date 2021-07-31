@@ -13,11 +13,15 @@ const {
   bookingRequestSchema,
   approveBookingRequestSchema,
   getBookingRequestSchema,
+  rejectBookingRequestSchema,
 } = require("../schema/bookingRequestSchema");
 const { validationHelper } = require("../utils/requestValidationTool");
 const {
   getAllBookingRequestController,
 } = require("../controllers/bookingRequest/getAllBookingRequest.controller");
+const {
+  rejectBookingRequestController,
+} = require("../controllers/bookingRequest/rejectBookingRequest.controller");
 
 const router = Router();
 
@@ -46,6 +50,13 @@ router.post(
   dummyAuthMiddleware,
   validationHelper(approveBookingRequestSchema, "body"),
   approveBookingRequestController
+);
+
+router.post(
+  "/reject",
+  dummyAuthMiddleware,
+  validationHelper(rejectBookingRequestSchema, "body"),
+  rejectBookingRequestController
 );
 
 module.exports = router;
