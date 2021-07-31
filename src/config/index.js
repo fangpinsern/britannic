@@ -12,4 +12,5 @@ module.exports = {
   DB_URL: process.env.DB_URL,
   ...envVariables,
   DUMMY_AUTH: process.env.DUMMY_AUTH,
+  TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
 };
