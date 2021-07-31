@@ -3,9 +3,10 @@ const Venue = require("../../models/venue.model");
 const { errorFormatter } = require("../../utils/errorFormatter");
 
 const getAllVenueAdminController = async (req, res, next) => {
+  const query = req.query;
   let allVenues;
   try {
-    allVenues = await Venue.find();
+    allVenues = await Venue.find({ ...query });
   } catch (err) {
     return next(err);
   }

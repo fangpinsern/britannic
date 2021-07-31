@@ -20,14 +20,9 @@ const convertUnixToDateString = (unix) => {
     throw Error("Invalid unix time stamp. unix time stamp must be an integer");
   }
 
-  const values = dateString.c;
-  const year = String(values.year);
-  const month = String(values.month);
-  const day = String(values.day);
+  const values = dateString.toFormat("yyyy/LL/dd");
 
-  const newDateString = year + month + day;
-
-  return newDateString;
+  return values;
 };
 
 module.exports = { convertDateStringToUnix, convertUnixToDateString };

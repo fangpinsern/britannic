@@ -3,9 +3,12 @@ const Venue = require("../../models/venue.model");
 const { errorFormatter } = require("../../utils/errorFormatter");
 
 const getAllVenueController = async (req, res, next) => {
+  const query = req.query;
   let allVenues;
   try {
-    allVenues = await Venue.find({ visible: true }).populate("childVenues");
+    allVenues = await Venue.find({ ...query, visible: true }).populate(
+      "childVenues"
+    );
   } catch (err) {
     return next(err);
   }
