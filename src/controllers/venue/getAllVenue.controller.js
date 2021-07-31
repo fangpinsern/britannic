@@ -5,7 +5,7 @@ const { errorFormatter } = require("../../utils/errorFormatter");
 const getAllVenueController = async (req, res, next) => {
   let allVenues;
   try {
-    allVenues = await Venue.find({ visible: true });
+    allVenues = await Venue.find({ visible: true }).populate("childVenues");
   } catch (err) {
     return next(err);
   }
@@ -22,6 +22,7 @@ const getAllVenueController = async (req, res, next) => {
     const capacity = venue.capacity;
     const image = venue.image;
     const description = venue.description;
+    const childVenues = venue.childVenues;
     const visible = venue.visible;
 
     return {
@@ -30,6 +31,7 @@ const getAllVenueController = async (req, res, next) => {
       capacity,
       image,
       description,
+      childVenues,
       visible,
     };
   });

@@ -9,6 +9,13 @@ const VenueSchema = new Schema(
     description: { type: String, maxLength: 500 },
     visible: { type: Boolean, default: true, required: true },
     image: { type: String, required: false },
+    parentVenue: { type: Types.ObjectId, ref: "VenueSchema" },
+    isChildVenue: { type: Boolean, default: false, required: true },
+    childVenues: {
+      type: [{ type: Types.ObjectId, ref: "VenueSchema" }],
+      required: false,
+      default: [],
+    },
   },
   {
     collection: "venues",

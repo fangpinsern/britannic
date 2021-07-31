@@ -1,5 +1,8 @@
 const { Router, json } = require("express");
 const {
+  createChildVenueController,
+} = require("../controllers/venue/createChildVenue.controller");
+const {
   createVenueController,
 } = require("../controllers/venue/createVenue.controller");
 const {
@@ -14,6 +17,7 @@ const {
 const { dummyAuthMiddleware } = require("../middlewares/dummyAuth.middleware");
 const {
   createVenueSchema,
+  createChildVenueSchema,
   updateVenueVisibilitySchema,
 } = require("../schema/venueSchema");
 const { validationHelper } = require("../utils/requestValidationTool");
@@ -35,6 +39,13 @@ router.post(
   dummyAuthMiddleware,
   validationHelper(createVenueSchema, "body"),
   createVenueController
+);
+
+router.post(
+  "/childVenue/:parentId",
+  dummyAuthMiddleware,
+  validationHelper(createChildVenueSchema, "body"),
+  createChildVenueController
 );
 
 router.put(
