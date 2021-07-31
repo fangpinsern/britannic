@@ -23,6 +23,7 @@ const createBookingRequestController = async (req, res, next) => {
   const date = body.date;
   const timingSlots = body.timingSlots;
   const notes = body.notes;
+  const cca = body.cca;
 
   let isVenueIdValid;
   try {
@@ -68,6 +69,7 @@ const createBookingRequestController = async (req, res, next) => {
     date: dateToUnix,
     timingSlots: timingSlots,
     notes: notes,
+    cca: cca,
   });
 
   let savedBookingRequest;
@@ -79,8 +81,6 @@ const createBookingRequestController = async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
-
-  console.log(savedBookingRequest);
 
   try {
     const message = venueBookingRequestMessageBuilder(savedBookingRequest);

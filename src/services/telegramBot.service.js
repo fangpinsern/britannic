@@ -17,16 +17,16 @@ const sendMessageToChannel = (message) => {
 
 const venueBookingRequestMessageBuilder = (bookingRequest) => {
   const email = bookingRequest.email;
-  console.log(bookingRequest.venue);
   const venueName = bookingRequest.venue.name;
   const date = convertUnixToDateString(bookingRequest.date);
   const timeSlots = bookingRequest.timingSlots.map((timeSlot) => {
     return timingSlotNumberToTimingMapping[timeSlot];
   });
+  const cca = bookingRequest.cca || "Personal";
 
   const notes = bookingRequest.notes;
 
-  const returnMessage = `Email: ${email}\nvenueName: ${venueName}\ndate: ${date}\ntimeSlots: ${timeSlots}\nnotes: ${notes} `;
+  const returnMessage = `Email: ${email}\ncca: ${cca}\nvenueName: ${venueName}\ndate: ${date}\ntimeSlots: ${timeSlots}\nnotes: ${notes} `;
 
   return returnMessage;
 };
