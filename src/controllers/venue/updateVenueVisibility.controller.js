@@ -2,6 +2,7 @@ const { BAD_REQUEST, ACCEPTED } = require("http-status");
 const Venue = require("../../models/venue.model");
 const { errorFormatter } = require("../../utils/errorFormatter");
 
+// if parent venue invisible, child venue invisible
 const updateVenueVisibilityController = async (req, res, next) => {
   const venueId = req.params.venueId;
 
@@ -18,7 +19,19 @@ const updateVenueVisibilityController = async (req, res, next) => {
     return next(err);
   }
 
-  venueFound.visible = !venueFound.visible;
+  const updateVisibility = !venueFound.visible;
+  venueFound.visible = updateVisibility;
+
+  if (!venueFound.isChildVenue) {
+    try {
+      await Venue.updateMany(
+        { parentVenue: venueFound.id },
+        { visible: updateVisibility }
+      );
+    } catch (err) {
+      return next(err);
+    }
+  }
 
   let venueSaved;
   try {
