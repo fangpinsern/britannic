@@ -82,8 +82,6 @@ const createBookingRequestController = async (req, res, next) => {
     return next(err);
   }
 
-  console.log(savedBookingRequest);
-
   try {
     const message = venueBookingRequestMessageBuilder(savedBookingRequest);
     sendMessageToChannel(message);

@@ -34,6 +34,7 @@ const getAllBookingRequestController = async (req, res, next) => {
     const isRejected = bookingRequest.isRejected;
     const notes = bookingRequest.notes;
     const venue = bookingRequest.venue;
+    const cca = bookingRequest.cca;
 
     return {
       id,
@@ -44,6 +45,7 @@ const getAllBookingRequestController = async (req, res, next) => {
       isApproved,
       isRejected,
       venue,
+      cca,
     };
   });
 

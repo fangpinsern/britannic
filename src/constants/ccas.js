@@ -329,3 +329,5 @@ const CCAList = [
   "Volleyball M",
   "Volleyball F",
 ];
+
+module.exports = { CCAData, CCAList };
