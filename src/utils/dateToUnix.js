@@ -25,4 +25,15 @@ const convertUnixToDateString = (unix) => {
   return values;
 };
 
-module.exports = { convertDateStringToUnix, convertUnixToDateString };
+const getDayOfTheWeekInt = (unix) => {
+  const dateString = DateTime.fromMillis(unix, { zone: "utc" });
+  const dayOfTheWeek = dateString.weekday;
+
+  return dayOfTheWeek;
+};
+
+module.exports = {
+  convertDateStringToUnix,
+  convertUnixToDateString,
+  getDayOfTheWeekInt,
+};
