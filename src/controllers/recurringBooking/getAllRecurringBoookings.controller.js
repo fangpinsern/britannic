@@ -15,7 +15,7 @@ const getAllRecurringBookingController = async (req, res, next) => {
     return next(err);
   }
 
-  const returnBookingRequest = recurringBookings.map((recurringBooking) => {
+  const returnRecurringBooking = recurringBookings.map((recurringBooking) => {
     const id = recurringBooking.id;
     const email = recurringBooking.email;
     const startDate = convertUnixToDateString(recurringBooking.startDate);
@@ -39,7 +39,7 @@ const getAllRecurringBookingController = async (req, res, next) => {
     };
   });
 
-  return res.status(OK).json({ bookingRequest: returnBookingRequest });
+  return res.status(OK).json({ recurringBookings: returnRecurringBooking });
 };
 
 module.exports = { getAllRecurringBookingController };

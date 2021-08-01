@@ -63,7 +63,7 @@ const createRecurringBookingController = async (req, res, next) => {
 
   return res
     .status(ACCEPTED)
-    .json({ bookingRequestId: savedRecurringBooking.id });
+    .json({ recurringBookingId: savedRecurringBooking.id });
 };
 
 module.exports = { createRecurringBookingController };
