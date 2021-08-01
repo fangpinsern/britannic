@@ -2,6 +2,7 @@ const { OK } = require("http-status");
 const BookingRequest = require("../../models/bookingRequest.model");
 const { convertUnixToDateString } = require("../../utils/dateToUnix");
 const { errorFormatter } = require("../../utils/errorFormatter");
+const { mapSlotsToTiming } = require("../../utils/mapSlotsToTiming");
 
 const getAllBookingRequestController = async (req, res, next) => {
   const query = req.query;
@@ -30,7 +31,9 @@ const getAllBookingRequestController = async (req, res, next) => {
     const id = bookingRequest.id;
     const email = bookingRequest.email;
     const date = convertUnixToDateString(bookingRequest.date);
-    const timingSlots = bookingRequest.timingSlots;
+    const timingSlots = bookingRequest.timingSlots.map((timingSlot) => {
+      return mapSlotsToTiming(timingSlot);
+    });
     const isApproved = bookingRequest.isApproved;
     const isRejected = bookingRequest.isRejected;
     const notes = bookingRequest.notes;

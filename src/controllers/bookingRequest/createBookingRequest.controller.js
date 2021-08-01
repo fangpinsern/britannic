@@ -21,7 +21,7 @@ const createBookingRequestController = async (req, res, next) => {
   const email = body.email;
   const venueId = body.venueId;
   const date = body.date;
-  const timingSlots = body.timingSlots;
+  const timingSlots = body.timingSlots.sort();
   const notes = body.notes;
   const cca = body.cca;
 
