@@ -11,6 +11,7 @@ const bot = new TelegramBot(token, { polling: true });
 
 const sendMessageToChannel = (message) => {
   bot.sendMessage("-1001589190063", message).catch((err) => {
+    //todo move this id to env
     console.log("Channel message not sent");
   });
 };

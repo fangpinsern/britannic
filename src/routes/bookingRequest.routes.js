@@ -22,6 +22,9 @@ const {
 const {
   rejectBookingRequestController,
 } = require("../controllers/bookingRequest/rejectBookingRequest.controller");
+const {
+  approveBookingRequestIntentController,
+} = require("../controllers/bookingRequest/approveBookingRequestIntent.controller");
 
 const router = Router();
 
@@ -44,6 +47,13 @@ router.get(
 );
 
 router.get("/all", dummyAuthMiddleware, getAllBookingRequestController);
+
+router.get(
+  "/intent",
+  dummyAuthMiddleware,
+  validationHelper(approveBookingRequestSchema, "body"),
+  approveBookingRequestIntentController
+);
 
 router.post(
   "/approve",
