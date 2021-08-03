@@ -51,7 +51,7 @@ router.get("/all", dummyAuthMiddleware, getAllBookingRequestController);
 router.get(
   "/intent",
   dummyAuthMiddleware,
-  validationHelper(approveBookingRequestSchema, "body"),
+  validationHelper(approveBookingRequestSchema, "query"),
   approveBookingRequestIntentController
 );
 

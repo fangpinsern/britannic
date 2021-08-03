@@ -7,8 +7,8 @@ const {
 // returns what requests will be rejected on approval
 
 const approveBookingRequestIntentController = async (req, res, next) => {
-  const body = req.body;
-  const bookingRequestId = body.bookingRequestId;
+  const query = req.query;
+  const bookingRequestId = query.bookingRequestId;
 
   let bookingRequest;
   try {
@@ -43,7 +43,10 @@ const approveBookingRequestIntentController = async (req, res, next) => {
     return next(err);
   }
 
-  return res.status(OK).json({ conflict: conflictBookingRequest });
+  return res.status(OK).json({
+    bookingRequest: bookingRequest,
+    conflicts: conflictBookingRequest,
+  });
 };
 
 module.exports = { approveBookingRequestIntentController };
