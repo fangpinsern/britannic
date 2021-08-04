@@ -27,6 +27,7 @@ const getAllVenueController = async (req, res, next) => {
     const description = venue.description;
     const childVenues = venue.childVenues;
     const visible = venue.visible;
+    const openingHours = venue.openingHours;
 
     return {
       id,
@@ -36,6 +37,7 @@ const getAllVenueController = async (req, res, next) => {
       description,
       childVenues,
       visible,
+      openingHours,
     };
   });
 

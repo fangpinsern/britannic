@@ -6,6 +6,9 @@ const {
   createVenueController,
 } = require("../controllers/venue/createVenue.controller");
 const {
+  editVenueController,
+} = require("../controllers/venue/editVenue.controller");
+const {
   getAllVenueController,
 } = require("../controllers/venue/getAllVenue.controller");
 const {
@@ -19,6 +22,7 @@ const {
   createVenueSchema,
   createChildVenueSchema,
   updateVenueVisibilitySchema,
+  editVenueSchema,
 } = require("../schema/venueSchema");
 const { validationHelper } = require("../utils/requestValidationTool");
 
@@ -40,6 +44,8 @@ router.post(
   validationHelper(createVenueSchema, "body"),
   createVenueController
 );
+
+router.patch("/:venueId", dummyAuthMiddleware, editVenueController);
 
 router.post(
   "/childVenue/:parentId",
