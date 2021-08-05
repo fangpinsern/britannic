@@ -27,13 +27,9 @@ const approveBookingRequestIntentController = async (req, res, next) => {
     return next(err);
   }
 
-  const email = bookingRequest.email;
   const venue = bookingRequest.venue;
   const date = bookingRequest.date;
   const bookingTimeSlots = bookingRequest.timingSlots;
-  const notes = bookingRequest.notes;
-  const isApproved = bookingRequest.isApproved;
-  const isRejected = bookingRequest.isRejected;
 
   let conflictBookingRequest;
   try {
