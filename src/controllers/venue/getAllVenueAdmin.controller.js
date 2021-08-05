@@ -24,6 +24,7 @@ const getAllVenueAdminController = async (req, res, next) => {
     const image = venue.image;
     const description = venue.description;
     const visible = venue.visible;
+    const openingHours = venue.openingHours;
 
     return {
       id,
@@ -32,6 +33,7 @@ const getAllVenueAdminController = async (req, res, next) => {
       image,
       description,
       visible,
+      openingHours,
     };
   });
 

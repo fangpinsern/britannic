@@ -16,8 +16,21 @@ const createChildVenueSchema = yup.object().shape({
   image: yup.string(),
 });
 
+const editVenueSchema = yup.object().shape({
+  name: yup.string(),
+  description: yup.string(),
+  capacity: yup.number().integer(),
+  image: yup.string(),
+  openingHours: yup.string(),
+});
+
 const updateVenueVisibilitySchema = yup.object().shape({
   venueId: yup.string().required(),
 });
 
-module.exports = { createVenueSchema, updateVenueVisibilitySchema, createChildVenueSchema };
+module.exports = {
+  createVenueSchema,
+  updateVenueVisibilitySchema,
+  createChildVenueSchema,
+  editVenueSchema,
+};
