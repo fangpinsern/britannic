@@ -1,6 +1,7 @@
 const { Types } = require("mongoose");
 const BookingRequest = require("../models/bookingRequest.model");
 const Venue = require("../models/venue.model");
+const { sendEmail } = require("./email.service");
 
 const rejectBookingRequestInTheseSlots = async (
   venueId,
@@ -28,19 +29,13 @@ const rejectBookingRequestInTheseSlots = async (
       date: unixDate,
       timingSlots: { $in: timingSlots },
     };
-
-    console.log(searchQuery);
   }
 
   const requestToReject = await BookingRequest.find(searchQuery);
 
-  console.log(requestToReject);
-
   if (requestToReject.length <= 0) {
     return [];
   }
-
-  console.log(requestToReject);
 
   rejectedBookingRequestIds = [];
   for (let i = 0; i < requestToReject.length; i++) {
@@ -55,6 +50,16 @@ const rejectBookingRequestInTheseSlots = async (
     const savedRequest = await request.save();
 
     // send emails of rejection
+    // need some form of templating
+    try {
+      await sendEmail(
+        request.email,
+        "[REJECTED] Your request for booking has been rejected",
+        request.toString()
+      );
+    } catch (err) {
+      return next(err);
+    }
     rejectedBookingRequestIds.push(savedRequest.id);
   }
 

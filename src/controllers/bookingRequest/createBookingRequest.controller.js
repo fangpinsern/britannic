@@ -9,6 +9,7 @@ const { BAD_REQUEST, ACCEPTED } = require("http-status");
 const BookingRequest = require("../../models/bookingRequest.model");
 const Venue = require("../../models/venue.model");
 const { checkIfVenueAvailable } = require("../../services/booking.service");
+const { sendEmail } = require("../../services/email.service");
 const {
   sendMessageToChannel,
   venueBookingRequestMessageBuilder,
@@ -78,6 +79,16 @@ const createBookingRequestController = async (req, res, next) => {
     savedBookingRequest = await BookingRequest.findOne({
       _id: savedBookingRequest.id,
     }).populate("venue");
+  } catch (err) {
+    return next(err);
+  }
+  // need some form of templating
+  try {
+    await sendEmail(
+      email,
+      "[IN PROGRESS] We are currently reviewing your booking request",
+      savedBookingRequest.toString()
+    );
   } catch (err) {
     return next(err);
   }

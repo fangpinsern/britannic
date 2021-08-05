@@ -1,5 +1,6 @@
 const { BAD_REQUEST, ACCEPTED } = require("http-status");
 const BookingRequest = require("../../models/bookingRequest.model");
+const { sendEmail } = require("../../services/email.service");
 const { errorFormatter } = require("../../utils/errorFormatter");
 
 const rejectBookingRequestController = async (req, res, next) => {
@@ -50,6 +51,15 @@ const rejectBookingRequestController = async (req, res, next) => {
   }
 
   // send email of rejection
+  try {
+    await sendEmail(
+      email,
+      "[REJECTED] Your request for booking has been rejected",
+      savedBookingRequest.toString()
+    );
+  } catch (err) {
+    return next(err);
+  }
 
   return res.status(ACCEPTED).json({
     bookingRequestId: savedBookingRequest.id,
