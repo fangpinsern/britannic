@@ -5,6 +5,7 @@ const { checkIfVenueAvailable } = require("../../services/booking.service");
 const {
   rejectBookingRequestInTheseSlots,
 } = require("../../services/bookingRequest.service");
+const { sendEmail } = require("../../services/email.service");
 const { errorFormatter } = require("../../utils/errorFormatter");
 
 // check if booking request exist
@@ -103,6 +104,15 @@ const approveBookingRequestController = async (req, res, next) => {
   }
 
   // send email of approval
+  try {
+    await sendEmail(
+      email,
+      "[APPROVED] Your request of booking has been approved",
+      savedBookingRequest.toString()
+    );
+  } catch (err) {
+    return next(err);
+  }
 
   // reject all request that has this slot
   let rejectedBookingRequestsIds = [];
