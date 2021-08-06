@@ -25,6 +25,9 @@ const {
 const {
   approveBookingRequestIntentController,
 } = require("../controllers/bookingRequest/approveBookingRequestIntent.controller");
+const {
+  cancelBookingRequestController,
+} = require("../controllers/bookingRequest/cancelBookingRequests.controller");
 
 const router = Router();
 
@@ -45,6 +48,8 @@ router.get(
   validationHelper(getBookingRequestSchema, "query"),
   getBookingRequestInfo
 );
+
+router.get("/cancel/:bookingRequestId", cancelBookingRequestController);
 
 router.get("/all", dummyAuthMiddleware, getAllBookingRequestController);
 

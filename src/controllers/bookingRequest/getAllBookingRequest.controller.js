@@ -11,11 +11,13 @@ const getAllBookingRequestController = async (req, res, next) => {
   let searchQuery = {};
 
   if (q === "PENDING") {
-    searchQuery = { isApproved: false, isRejected: false };
+    searchQuery = { isApproved: false, isRejected: false, isCancelled: false };
   } else if (q === "APPROVED") {
-    searchQuery = { isApproved: true, isRejected: false };
+    searchQuery = { isApproved: true, isRejected: false, isCancelled: false };
   } else if (q === "REJECTED") {
-    searchQuery = { isApproved: false, isRejected: true };
+    searchQuery = { isRejected: true };
+  } else if (q === "CANCELLED") {
+    searchQuery = { isCancelled: true };
   }
 
   let allBookingRequest;
