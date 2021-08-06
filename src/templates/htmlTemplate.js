@@ -17,8 +17,22 @@ const sources = {
       "utf8"
     )
     .toString(),
+  INPROGRESS_TEMPLATE: fs
+    .readFileSync(
+      "/Users/pinsern/Desktop/KEWEB/backend/src/templates/inprogressRequest.hbs",
+      "utf8"
+    )
+    .toString(),
+  REJECTED_TEMPLATE: fs
+    .readFileSync(
+      "/Users/pinsern/Desktop/KEWEB/backend/src/templates/rejectedRequest.hbs",
+      "utf8"
+    )
+    .toString(),
 };
 
 const approveTemplate = Handlebars.compile(sources["APPROVED_TEMPLATE"]);
+const inprogressTemplate = Handlebars.compile(sources["INPROGRESS_TEMPLATE"]);
+const rejectedTemplate = Handlebars.compile(sources["REJECTED_TEMPLATE"]);
 
-module.exports = { approveTemplate };
+module.exports = { approveTemplate, inprogressTemplate, rejectedTemplate };
