@@ -23,6 +23,8 @@ const rejectBookingRequestInTheseSlots = async (
       venue: { $in: [venueId, venue.parentVenue] },
       date: unixDate,
       timingSlots: { $in: timingSlots },
+      isRejected: false,
+      isCancelled: false,
     };
   } else {
     searchQuery = {
@@ -31,6 +33,8 @@ const rejectBookingRequestInTheseSlots = async (
       },
       date: unixDate,
       timingSlots: { $in: timingSlots },
+      isRejected: false,
+      isCancelled: false,
     };
   }
 
@@ -100,6 +104,8 @@ const getConflictingBookingRequests = async (
       venue: { $in: [venueId, venue.parentVenue] },
       date: unixDate,
       timingSlots: { $in: timingSlots },
+      isRejected: false,
+      isCancelled: false,
     };
   } else {
     searchQuery = {
@@ -108,6 +114,8 @@ const getConflictingBookingRequests = async (
       },
       date: unixDate,
       timingSlots: { $in: timingSlots },
+      isRejected: false,
+      isCancelled: false,
     };
   }
 
