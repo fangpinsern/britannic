@@ -17,12 +17,13 @@ const sendEmailHelper = async (message, transport) => {
   return mailSent.messageId;
 };
 
-const sendEmail = async (to, subject, text) => {
+const sendEmail = async (to, subject, text, html) => {
   const mailData = {
     from: "KEVII VBS <keviiweb2@gmail.com>", // sender address
     to: to, // list of receivers
     subject: subject,
     text: text,
+    html: html,
   };
   const messagesent = await sendEmailHelper(mailData, transporter);
 
