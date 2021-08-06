@@ -13,7 +13,7 @@ const BookingReqSchema = new Schema(
       required: false,
     },
     notes: { type: String, maxLength: 500 },
-    cca: { type: String },
+    cca: { type: String, default: "PERSONAL" },
   },
   {
     collection: "booking_requests",

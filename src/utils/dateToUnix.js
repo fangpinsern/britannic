@@ -11,7 +11,7 @@ const convertDateStringToUnix = (dateString) => {
   return date.valueOf();
 };
 
-const convertUnixToDateString = (unix) => {
+const convertUnixToDateString = (unix, format = "yyyy/LL/dd") => {
   const dateString = DateTime.fromMillis(unix, { zone: "utc" });
   if (dateString.invalid) {
     console.log(
@@ -20,7 +20,7 @@ const convertUnixToDateString = (unix) => {
     throw Error("Invalid unix time stamp. unix time stamp must be an integer");
   }
 
-  const values = dateString.toFormat("yyyy/LL/dd");
+  const values = dateString.toFormat(format);
 
   return values;
 };

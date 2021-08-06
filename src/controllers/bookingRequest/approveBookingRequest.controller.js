@@ -5,7 +5,11 @@ const { checkIfVenueAvailable } = require("../../services/booking.service");
 const {
   rejectBookingRequestInTheseSlots,
 } = require("../../services/bookingRequest.service");
+const { sendEmail } = require("../../services/email.service");
 const { errorFormatter } = require("../../utils/errorFormatter");
+const { approveTemplate } = require("../../templates/htmlTemplate");
+const { convertUnixToDateString } = require("../../utils/dateToUnix");
+const { mapSlotsToTiming } = require("../../utils/mapSlotsToTiming");
 
 // check if booking request exist
 // check if booking request is already approved
@@ -22,7 +26,9 @@ const approveBookingRequestController = async (req, res, next) => {
 
   let bookingRequest;
   try {
-    bookingRequest = await BookingRequest.findOne({ _id: bookingRequestId });
+    bookingRequest = await BookingRequest.findOne({
+      _id: bookingRequestId,
+    }).populate("venue");
   } catch (err) {
     return next(err);
   }
@@ -98,11 +104,45 @@ const approveBookingRequestController = async (req, res, next) => {
   let savedBookingRequest;
   try {
     savedBookingRequest = await bookingRequest.save();
+    savedBookingRequest = await BookingRequest.findOne({
+      _id: savedBookingRequest.id,
+    })
+      .populate("venue")
+      .populate("bookingIds");
   } catch (err) {
     return next(err);
   }
 
+  const bookings = savedBookingRequest.bookingIds.map((booking) => {
+    const returnBooking = {
+      id: booking._id,
+      date: convertUnixToDateString(booking.date),
+      timingSlot: mapSlotsToTiming(booking.timingSlot),
+      notes: booking.notes,
+    };
+
+    return returnBooking;
+  });
+
+  const html = approveTemplate({
+    id: savedBookingRequest._id.toString(),
+    email: savedBookingRequest.email,
+    venue: savedBookingRequest.venue.toObject(),
+    bookingIds: bookings,
+    cca: savedBookingRequest.cca || "Personal",
+  });
+
   // send email of approval
+  try {
+    await sendEmail(
+      email,
+      "[APPROVED] Your request of booking has been approved",
+      savedBookingRequest.toString(),
+      html
+    );
+  } catch (err) {
+    return next(err);
+  }
 
   // reject all request that has this slot
   let rejectedBookingRequestsIds = [];

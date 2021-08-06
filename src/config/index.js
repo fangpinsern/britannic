@@ -13,4 +13,6 @@ module.exports = {
   ...envVariables,
   DUMMY_AUTH: process.env.DUMMY_AUTH,
   TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
+  EMAIL_USER: process.env.EMAIL_USER,
+  EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
 };
