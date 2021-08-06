@@ -1,6 +1,9 @@
 const { Types } = require("mongoose");
 const BookingRequest = require("../models/bookingRequest.model");
 const Venue = require("../models/venue.model");
+const { rejectedTemplate } = require("../templates/htmlTemplate");
+const { convertUnixToDateString } = require("../utils/dateToUnix");
+const { mapSlotsToTiming } = require("../utils/mapSlotsToTiming");
 const { sendEmail } = require("./email.service");
 
 const rejectBookingRequestInTheseSlots = async (
@@ -31,7 +34,9 @@ const rejectBookingRequestInTheseSlots = async (
     };
   }
 
-  const requestToReject = await BookingRequest.find(searchQuery);
+  const requestToReject = await BookingRequest.find(searchQuery).populate(
+    "venue"
+  );
 
   if (requestToReject.length <= 0) {
     return [];
@@ -51,11 +56,24 @@ const rejectBookingRequestInTheseSlots = async (
 
     // send emails of rejection
     // need some form of templating
+    const html = rejectedTemplate({
+      id: request._id.toString(),
+      email: request.email,
+      venueName: request.venue.name,
+      timingSlots: request.timingSlots.map((timingSlot) => {
+        return mapSlotsToTiming(timingSlot);
+      }),
+      date: convertUnixToDateString(request.date),
+      cca: request.cca || "Personal",
+      notes: request.notes,
+    });
+
     try {
       await sendEmail(
         request.email,
         "[REJECTED] Your request for booking has been rejected",
-        request.toString()
+        request.toString(),
+        html
       );
     } catch (err) {
       return next(err);

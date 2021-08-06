@@ -14,8 +14,13 @@ const {
   sendMessageToChannel,
   venueBookingRequestMessageBuilder,
 } = require("../../services/telegramBot.service");
-const { convertDateStringToUnix } = require("../../utils/dateToUnix");
+const { inprogressTemplate } = require("../../templates/htmlTemplate");
+const {
+  convertDateStringToUnix,
+  convertUnixToDateString,
+} = require("../../utils/dateToUnix");
 const { errorFormatter } = require("../../utils/errorFormatter");
+const { mapSlotsToTiming } = require("../../utils/mapSlotsToTiming");
 
 const createBookingRequestController = async (req, res, next) => {
   const body = req.body;
@@ -83,11 +88,24 @@ const createBookingRequestController = async (req, res, next) => {
     return next(err);
   }
   // need some form of templating
+  const html = inprogressTemplate({
+    venueName: savedBookingRequest.venue.name,
+    id: savedBookingRequest._id.toString(),
+    email: savedBookingRequest.email,
+    timingSlots: savedBookingRequest.timingSlots.map((timingSlot) => {
+      return mapSlotsToTiming(timingSlot);
+    }),
+    date: convertUnixToDateString(savedBookingRequest.date),
+    cca: savedBookingRequest.cca || "Personal",
+    notes: savedBookingRequest.notes,
+  });
+
   try {
     await sendEmail(
       email,
       "[IN PROGRESS] We are currently reviewing your booking request",
-      savedBookingRequest.toString()
+      savedBookingRequest.toString(),
+      html
     );
   } catch (err) {
     return next(err);
