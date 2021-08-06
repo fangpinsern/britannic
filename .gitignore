@@ -1,9 +1,5 @@
 node_modules
 package-lock.json
 .env
-<<<<<<< HEAD
-.DS_Store
-=======
 .DS_Store
 public/
->>>>>>> Update template
