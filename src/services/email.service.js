@@ -17,7 +17,7 @@ const sendEmailHelper = async (message, transport) => {
   return mailSent.messageId;
 };
 
-const sendEmail = async (to, subject, text) => {
+const sendEmail = async (to, subject, text, html) => {
   const mailData = {
     from: "KEVII VBS <keviiweb2@gmail.com>", // sender address
     to: to, // list of receivers

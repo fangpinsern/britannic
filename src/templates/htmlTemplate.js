@@ -5,6 +5,11 @@ Handlebars.registerHelper("inc", function (value, options) {
   return parseInt(value) + 1;
 });
 
+Handlebars.registerHelper("extn", function (value, options) {
+  const name = value.substring(0, value.lastIndexOf("@"));
+  return name;
+});
+
 const sources = {
   APPROVED_TEMPLATE: fs
     .readFileSync(
