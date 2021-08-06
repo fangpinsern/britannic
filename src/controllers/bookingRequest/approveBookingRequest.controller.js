@@ -132,8 +132,6 @@ const approveBookingRequestController = async (req, res, next) => {
     cca: savedBookingRequest.cca || "Personal",
   });
 
-  console.log(html);
-
   // send email of approval
   try {
     await sendEmail(
