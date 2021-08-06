@@ -2,7 +2,7 @@ const { Schema, connection, Types } = require("mongoose");
 
 const VenueSchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     capacity: { type: Number, required: true },
     openingHours: { type: String, required: true },
     priorityEmails: { type: [String] },
