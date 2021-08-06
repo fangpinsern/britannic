@@ -39,7 +39,7 @@ const getVenueBookingsController = async (req, res, next) => {
   bookings.map((booking) => {
     const unixDate = booking.date;
     const timingSlot = booking.timingSlot;
-    const dateString = convertUnixToDateString(unixDate);
+    const dateString = convertUnixToDateString(unixDate, "yyyyLLdd");
     const dateStringExist = response[dateString];
 
     if (!dateStringExist) {
