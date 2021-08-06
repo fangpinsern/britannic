@@ -13,6 +13,13 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 
+// const options = {
+//   dotfiles: "ignore",
+//   etag: true,
+// }
+
+app.use(express.static("public"));
+
 app.get("/ping", (req, res, next) => {
   return res.send("You have successfully connected to the server");
 });
