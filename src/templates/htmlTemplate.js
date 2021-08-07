@@ -12,28 +12,16 @@ Handlebars.registerHelper("extn", function (value, options) {
 
 const sources = {
   APPROVED_TEMPLATE: fs
-    .readFileSync(
-      "/Users/pinsern/Desktop/KEWEB/backend/src/templates/approvedRequest.hbs",
-      "utf8"
-    )
+    .readFileSync(__dirname + "/approvedRequest.hbs", "utf8")
     .toString(),
   INPROGRESS_TEMPLATE: fs
-    .readFileSync(
-      "/Users/pinsern/Desktop/KEWEB/backend/src/templates/inprogressRequest.hbs",
-      "utf8"
-    )
+    .readFileSync(__dirname + "/inprogressRequest.hbs", "utf8")
     .toString(),
   REJECTED_TEMPLATE: fs
-    .readFileSync(
-      "/Users/pinsern/Desktop/KEWEB/backend/src/templates/rejectedRequest.hbs",
-      "utf8"
-    )
+    .readFileSync(__dirname + "/rejectedRequest.hbs", "utf8")
     .toString(),
   CANCELLED_TEMPLATE: fs
-    .readFileSync(
-      "/Users/pinsern/Desktop/KEWEB/backend/src/templates/cancelledRequest.hbs",
-      "utf8"
-    )
+    .readFileSync(__dirname + "/cancelledRequest.hbs", "utf8")
     .toString(),
 };
 
