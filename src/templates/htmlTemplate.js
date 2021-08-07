@@ -21,10 +21,7 @@ const sources = {
     .readFileSync(__dirname + "/rejectedRequest.hbs", "utf8")
     .toString(),
   CANCELLED_TEMPLATE: fs
-    .readFileSync(
-      "/Users/pinsern/Desktop/KEWEB/backend/src/templates/cancelledRequest.hbs",
-      "utf8"
-    )
+    .readFileSync(__dirname + "/cancelledRequest.hbs", "utf8")
     .toString(),
 };
 
