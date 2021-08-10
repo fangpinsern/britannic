@@ -1,6 +1,6 @@
 # Venue Booking System Backend
 
-Documentation: https://fangpinsern.github.io/republic/
+Documentation: https://fangpinsern.github.io/britannic/
 
 - Nodejs
 - Express
