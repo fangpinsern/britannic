@@ -1,4 +1,6 @@
-# KE Web Backend
+# Venue Booking System Backend
+
+Documentation: https://fangpinsern.github.io/republic/
 
 - Nodejs
 - Express
