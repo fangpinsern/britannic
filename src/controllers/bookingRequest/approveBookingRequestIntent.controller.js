@@ -1,4 +1,4 @@
-const { OK } = require("http-status");
+const { OK, BAD_REQUEST } = require("http-status");
 const BookingRequest = require("../../models/bookingRequest.model");
 const {
   getConflictingBookingRequests,
