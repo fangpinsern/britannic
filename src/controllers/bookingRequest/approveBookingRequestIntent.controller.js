@@ -4,6 +4,7 @@ const {
   getConflictingBookingRequests,
 } = require("../../services/bookingRequest.service");
 const { convertUnixToDateString } = require("../../utils/dateToUnix");
+const { errorFormatter } = require("../../utils/errorFormatter");
 const { mapSlotsToTiming } = require("../../utils/mapSlotsToTiming");
 
 // returns what requests will be rejected on approval
