@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrepublic=self.webpackChunkrepublic||[]).push([[683],{3774:function(e){e.exports=JSON.parse('{"allTagsPath":"/blog/tags","slug":"greetings","name":"greetings","count":1,"permalink":"/blog/tags/greetings"}')}}]);
