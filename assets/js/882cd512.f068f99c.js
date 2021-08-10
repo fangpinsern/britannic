@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrepublic=self.webpackChunkrepublic||[]).push([[254],{5111:function(e){e.exports=JSON.parse('{"allTagsPath":"/britannic/blog/tags","slug":"greetings","name":"greetings","count":1,"permalink":"/britannic/blog/tags/greetings"}')}}]);

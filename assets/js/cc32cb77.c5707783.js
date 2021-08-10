@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrepublic=self.webpackChunkrepublic||[]).push([[819],{8168:function(u){u.exports=JSON.parse('{"allTagsPath":"/britannic/blog/tags","slug":"docusaurus","name":"docusaurus","count":3,"permalink":"/britannic/blog/tags/docusaurus"}')}}]);

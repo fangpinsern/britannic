@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrepublic=self.webpackChunkrepublic||[]).push([[841],{6324:function(a){a.exports=JSON.parse('{"allTagsPath":"/britannic/blog/tags","slug":"facebook","name":"facebook","count":1,"permalink":"/britannic/blog/tags/facebook"}')}}]);
