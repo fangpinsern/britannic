@@ -105,8 +105,6 @@ const timeSlotGenerator = (operatingHours, sectioning = "HOURLY") => {
     listOfNumbers.push(i);
   }
 
-  console.log(listOfNumbers);
-
   const sepList = pickSeperator(sectioning);
 
   const numberInOrder = listOfNumbers.flatMap((number, i) => {
@@ -118,9 +116,6 @@ const timeSlotGenerator = (operatingHours, sectioning = "HOURLY") => {
       return number + ".00";
     }
   });
-
-  console.log(numberInOrder);
-
   let slotVals = {};
   for (i = 0; i < numberInOrder.length - 1; i++) {
     const first = numberInOrder[i];
@@ -131,10 +126,16 @@ const timeSlotGenerator = (operatingHours, sectioning = "HOURLY") => {
     slotVals[i + 1] = slot;
   }
 
-  console.log(slotVals);
-
   return slotVals;
 };
+
+// var t0 = performance.now();
+
+// const a = timeSlotGenerator("7AM - 11PM", "BIHOURLY"); // <---- measured code goes between t0 and t1
+
+// var t1 = performance.now();
+// console.log(a);
+// console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
 
 // timeSlotGenerator("7AM - 11PM", "BIHOURLY");
 // console.log(hourlyConverter("23.30"));
