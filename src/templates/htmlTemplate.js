@@ -20,10 +20,18 @@ const sources = {
   REJECTED_TEMPLATE: fs
     .readFileSync(__dirname + "/rejectedRequest.hbs", "utf8")
     .toString(),
+  CANCELLED_TEMPLATE: fs
+    .readFileSync(__dirname + "/cancelledRequest.hbs", "utf8")
+    .toString(),
 };
 
 const approveTemplate = Handlebars.compile(sources["APPROVED_TEMPLATE"]);
 const inprogressTemplate = Handlebars.compile(sources["INPROGRESS_TEMPLATE"]);
 const rejectedTemplate = Handlebars.compile(sources["REJECTED_TEMPLATE"]);
-
-module.exports = { approveTemplate, inprogressTemplate, rejectedTemplate };
+const cancelledTemplate = Handlebars.compile(sources["CANCELLED_TEMPLATE"]);
+module.exports = {
+  approveTemplate,
+  inprogressTemplate,
+  rejectedTemplate,
+  cancelledTemplate,
+};
