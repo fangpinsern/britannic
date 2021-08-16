@@ -39,8 +39,7 @@ const cancelBookingRequestController = async (req, res, next) => {
     .plus({ hours: 8 })
     .valueOf();
 
-  console.log(unixTimeNow);
-  console.log(bookingRequest.date);
+  // only can cancel 1 day in advance. in SGT
   if (unixTimeNow > bookingRequest.date) {
     const message =
       "Too late to cancel now. Cancellations can only be done lastest 1 day in advance";
@@ -50,7 +49,6 @@ const cancelBookingRequestController = async (req, res, next) => {
   const bookingIds = bookingRequest.bookingIds;
   if (bookingIds.length !== 0) {
     //delete bookings
-    console.log("Something is here");
     const deleteStatus = await Booking.deleteMany({
       _id: {
         $in: bookingIds,
@@ -97,6 +95,8 @@ const cancelBookingRequestController = async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
+
+  // update those who wanted to book this slot that the slot is now available
 
   return res.status(ACCEPTED).json({
     message: "Your booking has been cancelled",
