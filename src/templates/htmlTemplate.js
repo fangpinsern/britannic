@@ -23,15 +23,22 @@ const sources = {
   CANCELLED_TEMPLATE: fs
     .readFileSync(__dirname + "/cancelledRequest.hbs", "utf8")
     .toString(),
+  PAST_REQUEST_AVAIL_TEMPLATE: fs
+    .readFileSync(__dirname + "/notifyPastRequestAvailable.hbs", "utf8")
+    .toString(),
 };
 
 const approveTemplate = Handlebars.compile(sources["APPROVED_TEMPLATE"]);
 const inprogressTemplate = Handlebars.compile(sources["INPROGRESS_TEMPLATE"]);
 const rejectedTemplate = Handlebars.compile(sources["REJECTED_TEMPLATE"]);
 const cancelledTemplate = Handlebars.compile(sources["CANCELLED_TEMPLATE"]);
+const pastRequestAvailTemplate = Handlebars.compile(
+  sources["PAST_REQUEST_AVAIL_TEMPLATE"]
+);
 module.exports = {
   approveTemplate,
   inprogressTemplate,
   rejectedTemplate,
   cancelledTemplate,
+  pastRequestAvailTemplate,
 };
