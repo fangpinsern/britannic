@@ -1,10 +1,18 @@
-const { Types } = require("mongoose");
+const Booking = require("../models/booking.model");
 const BookingRequest = require("../models/bookingRequest.model");
 const Venue = require("../models/venue.model");
-const { rejectedTemplate } = require("../templates/htmlTemplate");
+const {
+  rejectedTemplate,
+  approveTemplate,
+} = require("../templates/htmlTemplate");
 const { convertUnixToDateString } = require("../utils/dateToUnix");
 const { mapSlotsToTiming } = require("../utils/mapSlotsToTiming");
+const { checkIfVenueAvailable } = require("./booking.service");
 const { sendEmail } = require("./email.service");
+const {
+  instantBookingRequestMessageBuilder,
+  sendMessageToChannel,
+} = require("./telegramBot.service");
 
 const rejectBookingRequestInTheseSlots = async (
   venueId,
@@ -72,16 +80,13 @@ const rejectBookingRequestInTheseSlots = async (
       notes: request.notes,
     });
 
-    try {
-      await sendEmail(
-        request.email,
-        "[REJECTED] Your request for booking has been rejected",
-        request.toString(),
-        html
-      );
-    } catch (err) {
-      return next(err);
-    }
+    await sendEmail(
+      request.email,
+      "[REJECTED] Your request for booking has been rejected",
+      request.toString(),
+      html
+    );
+
     rejectedBookingRequestIds.push(savedRequest.id);
   }
 
@@ -153,7 +158,98 @@ const getConflictingBookingRequests = async (
   return returnVal;
 };
 
+// very dangerous.. need to find a way to refactor it
+const approveBookingRequestById = async (bookingRequestId) => {
+  const bookingRequest = await BookingRequest.findOne({
+    _id: bookingRequestId,
+  });
+
+  const email = bookingRequest.email;
+  const venue = bookingRequest.venue;
+  const date = bookingRequest.date;
+  const bookingTimeSlots = bookingRequest.timingSlots;
+  const notes = bookingRequest.notes;
+  const isApproved = bookingRequest.isApproved;
+  const isRejected = bookingRequest.isRejected;
+
+  if (isApproved) {
+    throw new Error(
+      "Booking request has already been approved. You cannot reApprove it"
+    );
+  }
+
+  if (isRejected) {
+    throw new Error(
+      "Booking request has already been rejected. You cannot approve a rejected request"
+    );
+  }
+
+  const newBookingIds = [];
+
+  for (let i = 0; i < bookingTimeSlots.length; i++) {
+    const timingSlot = bookingTimeSlots[i];
+    const newBooking = new Booking({
+      email: email,
+      venue: venue,
+      date: date,
+      timingSlot: timingSlot,
+      notes: notes,
+    });
+    const savedBooking = await newBooking.save();
+
+    newBookingIds.push(savedBooking.id);
+  }
+
+  bookingRequest.isApproved = true;
+  bookingRequest.bookingIds = newBookingIds;
+  let savedBookingRequest = await bookingRequest.save();
+  savedBookingRequest = await BookingRequest.findOne({
+    _id: savedBookingRequest.id,
+  })
+    .populate("venue")
+    .populate("bookingIds");
+
+  const bookings = savedBookingRequest.bookingIds.map((booking) => {
+    const returnBooking = {
+      id: booking._id,
+      date: convertUnixToDateString(booking.date),
+      timingSlot: mapSlotsToTiming(booking.timingSlot),
+      notes: booking.notes,
+    };
+
+    return returnBooking;
+  });
+
+  const html = approveTemplate({
+    id: savedBookingRequest._id.toString(),
+    email: savedBookingRequest.email,
+    venue: savedBookingRequest.venue.toObject(),
+    bookingIds: bookings,
+    cca: savedBookingRequest.cca || "Personal",
+  });
+  await sendEmail(
+    email,
+    "[APPROVED] Your request of booking has been approved",
+    savedBookingRequest.toString(),
+    html
+  );
+
+  try {
+    const message = instantBookingRequestMessageBuilder(savedBookingRequest);
+    sendMessageToChannel(message);
+  } catch (err) {
+    console.log(err);
+    console.log("Channel message not sent");
+  }
+
+  return {
+    bookingRequestId: savedBookingRequest.id,
+    bookingIds: newBookingIds,
+  };
+};
+
 module.exports = {
   rejectBookingRequestInTheseSlots,
   getConflictingBookingRequests,
+  approveBookingRequestById,
 };

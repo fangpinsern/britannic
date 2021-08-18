@@ -16,6 +16,7 @@ const VenueSchema = new Schema(
       required: false,
       default: [],
     },
+    isInstantBook: { type: Boolean, default: false, required: true },
   },
   {
     collection: "venues",

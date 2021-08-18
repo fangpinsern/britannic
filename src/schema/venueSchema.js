@@ -28,9 +28,14 @@ const updateVenueVisibilitySchema = yup.object().shape({
   venueId: yup.string().required(),
 });
 
+const updateVenueInstantBookSchema = yup.object().shape({
+  venueId: yup.string().required(),
+});
+
 module.exports = {
   createVenueSchema,
   updateVenueVisibilitySchema,
   createChildVenueSchema,
   editVenueSchema,
+  updateVenueInstantBookSchema,
 };

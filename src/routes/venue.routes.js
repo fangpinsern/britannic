@@ -15,6 +15,9 @@ const {
   getAllVenueAdminController,
 } = require("../controllers/venue/getAllVenueAdmin.controller");
 const {
+  updateVenueInstantBookController,
+} = require("../controllers/venue/updateVenueInstantBook.controller");
+const {
   updateVenueVisibilityController,
 } = require("../controllers/venue/updateVenueVisibility.controller");
 const { dummyAuthMiddleware } = require("../middlewares/dummyAuth.middleware");
@@ -23,6 +26,7 @@ const {
   createChildVenueSchema,
   updateVenueVisibilitySchema,
   editVenueSchema,
+  updateVenueInstantBookSchema,
 } = require("../schema/venueSchema");
 const { validationHelper } = require("../utils/requestValidationTool");
 
@@ -59,6 +63,13 @@ router.put(
   dummyAuthMiddleware,
   validationHelper(updateVenueVisibilitySchema, "params"),
   updateVenueVisibilityController
+);
+
+router.put(
+  "/instantBook/:venueId",
+  dummyAuthMiddleware,
+  validationHelper(updateVenueInstantBookSchema, "params"),
+  updateVenueInstantBookController
 );
 
 module.exports = router;
