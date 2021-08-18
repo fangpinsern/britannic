@@ -13,6 +13,10 @@ const BookingReqSchema = new Schema(
       type: [{ type: Types.ObjectId, ref: "BookingSchema" }],
       required: false,
     },
+    conflictingRequest: {
+      type: [{ type: Types.ObjectId, ref: "BookingReqSchema" }],
+      default: [],
+    },
     notes: { type: String, maxLength: 500 },
     cca: { type: String, default: "PERSONAL" },
   },

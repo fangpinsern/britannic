@@ -3,7 +3,10 @@ const { DateTime } = require("luxon");
 const Booking = require("../../models/booking.model");
 const BookingRequest = require("../../models/bookingRequest.model");
 const { sendEmail } = require("../../services/email.service");
-const { cancelledTemplate } = require("../../templates/htmlTemplate");
+const {
+  cancelledTemplate,
+  pastRequestAvailTemplate,
+} = require("../../templates/htmlTemplate");
 const { convertUnixToDateString } = require("../../utils/dateToUnix");
 const { errorFormatter } = require("../../utils/errorFormatter");
 const { mapSlotsToTiming } = require("../../utils/mapSlotsToTiming");
@@ -57,7 +60,7 @@ const cancelBookingRequestController = async (req, res, next) => {
     console.log("Delete Status: ", deleteStatus);
   }
 
-  bookingRequest.bookingRequestId = [];
+  bookingRequest.bookingIds = [];
 
   bookingRequest.isCancelled = true;
 
@@ -66,7 +69,9 @@ const cancelBookingRequestController = async (req, res, next) => {
     savedBookingRequest = await bookingRequest.save();
     savedBookingRequest = await BookingRequest.findOne({
       _id: savedBookingRequest.id,
-    }).populate("venue");
+    })
+      .populate("venue")
+      .populate("conflictingRequest");
   } catch (err) {
     return next(err);
   }
@@ -97,6 +102,35 @@ const cancelBookingRequestController = async (req, res, next) => {
   }
 
   // update those who wanted to book this slot that the slot is now available
+
+  // send email of rejection
+
+  const pastConflicts = savedBookingRequest.conflictingRequest;
+
+  for (let i = 0; i < pastConflicts.length; i++) {
+    const pastConflict = pastConflicts[i];
+    const conflictHtml = pastRequestAvailTemplate({
+      id: pastConflict._id.toString(),
+      email: pastConflict.email,
+      venueName: savedBookingRequest.venue.name,
+      timingSlots: pastConflict.timingSlots.map((timingSlot) => {
+        return mapSlotsToTiming(timingSlot);
+      }),
+      date: convertUnixToDateString(pastConflict.date),
+      cca: pastConflict.cca || "Personal",
+      notes: pastConflict.notes,
+    });
+    try {
+      await sendEmail(
+        pastConflict.email,
+        "[NOTIFICATION] Previously rejected reqeust has been made available",
+        pastConflict.toString(),
+        conflictHtml
+      );
+    } catch (err) {
+      return next(err);
+    }
+  }
 
   return res.status(ACCEPTED).json({
     message: "Your booking has been cancelled",

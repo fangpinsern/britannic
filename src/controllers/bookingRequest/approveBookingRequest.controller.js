@@ -160,6 +160,14 @@ const approveBookingRequestController = async (req, res, next) => {
     return next(errorFormatter(message, INTERNAL_SERVER_ERROR));
   }
 
+  savedBookingRequest.conflictingRequest = rejectedBookingRequestsIds;
+
+  try {
+    savedBookingRequest = await savedBookingRequest.save();
+  } catch (err) {
+    return next(err);
+  }
+
   return res.status(ACCEPTED).json({
     bookingRequestId: savedBookingRequest.id,
     bookingIds: newBookingIds,
