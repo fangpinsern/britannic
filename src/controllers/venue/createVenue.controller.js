@@ -1,5 +1,6 @@
 const { ACCEPTED } = require("http-status");
 const Venue = require("../../models/venue.model");
+const fs = require("fs");
 
 const createVenueController = async (req, res, next) => {
   const body = req.body;
@@ -10,13 +11,25 @@ const createVenueController = async (req, res, next) => {
   const description = body.description;
   const image = body.image;
 
+  // move image to perm storage
+  fs.rename(
+    __dirname + "/../../temp/" + image,
+    __dirname + "/../../../public/img/" + image,
+    (err) => {
+      if (err) {
+        return next(err);
+      }
+      console.log("Rename complete!");
+    }
+  );
+
   const newVenue = new Venue({
     name: name,
     capacity: capacity,
     openingHours: openingHours,
     priorityEmails: priorityEmails,
     description: description,
-    image: image,
+    image: "/img/" + image,
   });
 
   let savedVenue;

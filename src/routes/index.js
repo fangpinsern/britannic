@@ -5,6 +5,7 @@ const venueRouter = require("./venue.routes");
 const bookingRequestRouter = require("./bookingRequest.routes");
 const bookingRouter = require("./booking.routes");
 const recurringBookingRouter = require("./recurringBooking.routes");
+const imageRouter = require("./image.routes");
 
 const router = Router();
 router.use(json());
@@ -18,5 +19,6 @@ router.use("/venue", venueRouter);
 router.use("/bookingreq", bookingRequestRouter);
 router.use("/booking", bookingRouter);
 router.use("/recurringbooking", recurringBookingRouter);
+router.use("/image", imageRouter);
 
 module.exports = router;

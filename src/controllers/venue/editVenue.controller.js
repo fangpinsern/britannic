@@ -1,12 +1,11 @@
 const { BAD_REQUEST, ACCEPTED } = require("http-status");
 const Venue = require("../../models/venue.model");
 const { errorFormatter } = require("../../utils/errorFormatter");
+const fs = require("fs/promises");
 
 const editVenueController = async (req, res, next) => {
   const params = req.params;
   const venueId = params.venueId;
-
-  console.log(venueId);
 
   const body = req.body;
 
@@ -21,6 +20,37 @@ const editVenueController = async (req, res, next) => {
     const message = "Venue does not exist";
     return next(errorFormatter(message, BAD_REQUEST));
   }
+
+  if (body.image) {
+    const image = body.image;
+
+    // move old image out
+    if (venue.image) {
+      const imageId = venue.image.split("/")[2];
+      try {
+        await fs.rename(
+          __dirname + "/../../../public/img/" + imageId,
+          __dirname + "/../../temp/" + imageId
+        );
+      } catch (err) {
+        console.log("File not in public folder");
+      }
+    }
+
+    // move new image in
+    try {
+      await fs.rename(
+        __dirname + "/../../temp/" + image,
+        __dirname + "/../../../public/img/" + image
+      );
+    } catch (err) {
+      return next(err);
+    }
+
+    body.image = "/img/" + image;
+  }
+
+  console.log("bODY", body);
 
   let updatedVenue;
   try {
