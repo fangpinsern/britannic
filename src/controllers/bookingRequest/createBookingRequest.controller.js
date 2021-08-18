@@ -9,6 +9,9 @@ const { BAD_REQUEST, ACCEPTED } = require("http-status");
 const BookingRequest = require("../../models/bookingRequest.model");
 const Venue = require("../../models/venue.model");
 const { checkIfVenueAvailable } = require("../../services/booking.service");
+const {
+  approveBookingRequestById,
+} = require("../../services/bookingRequest.service");
 const { sendEmail } = require("../../services/email.service");
 const {
   sendMessageToChannel,
@@ -87,6 +90,22 @@ const createBookingRequestController = async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
+
+  // check if instantBook of venue is true
+
+  const instantBook = isVenueIdValid.isInstantBook;
+
+  if (instantBook) {
+    const approvedBookingRequest = await approveBookingRequestById(
+      savedBookingRequest.id
+    );
+
+    return res.status(ACCEPTED).json({
+      message: "Venue eligible for instant booking",
+      bookingRequestId: approvedBookingRequest.bookingRequestId,
+    });
+  }
+
   // need some form of templating
   const html = inprogressTemplate({
     venueName: savedBookingRequest.venue.name,
