@@ -16,10 +16,7 @@ const sendMessageToChannel = (message) => {
   });
 };
 
-const venueBookingRequestMessageBuilder = (
-  bookingRequest,
-  instantBook = false
-) => {
+const venueBookingRequestMessageBuilder = (bookingRequest) => {
   const email = bookingRequest.email;
   const venueName = bookingRequest.venue.name;
   const date = convertUnixToDateString(bookingRequest.date);
