@@ -1,2 +1,2 @@
 source:
-  - any: ['src/**/*', '!src/docs/*']
+  - any: ['src/**/*']
