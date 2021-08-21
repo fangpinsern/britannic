@@ -20,4 +20,4 @@ jobs:
         stale-pr-message: 'PR has gone stale. Please finish working on it soon'
         stale-issue-label: 'stale'
         stale-pr-label: 'stale'
-        days-before-stale: 1
+        days-before-stale: 30
