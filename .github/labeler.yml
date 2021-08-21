@@ -1,2 +1,5 @@
 source:
-  - any: ['src/**/*']
+  - any: ["src/**/*"]
+
+example:
+  - any: ["public/*"]
