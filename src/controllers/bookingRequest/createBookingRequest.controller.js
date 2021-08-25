@@ -26,13 +26,10 @@ const { errorFormatter } = require("../../utils/errorFormatter");
 const { mapSlotsToTiming } = require("../../utils/mapSlotsToTiming");
 
 const createBookingRequestController = async (req, res, next) => {
-  const body = req.body;
-  const email = body.email;
-  const venueId = body.venueId;
-  const date = body.date;
+  const { body } = req;
+  const { email, venueId, date, notes, cca } = body;
+
   const timingSlots = body.timingSlots.sort();
-  const notes = body.notes;
-  const cca = body.cca;
 
   let isVenueIdValid;
   try {
@@ -111,9 +108,9 @@ const createBookingRequestController = async (req, res, next) => {
     venueName: savedBookingRequest.venue.name,
     id: savedBookingRequest._id.toString(),
     email: savedBookingRequest.email,
-    timingSlots: savedBookingRequest.timingSlots.map((timingSlot) => {
-      return mapSlotsToTiming(timingSlot);
-    }),
+    timingSlots: savedBookingRequest.timingSlots.map((timingSlot) =>
+      mapSlotsToTiming(timingSlot)
+    ),
     date: convertUnixToDateString(savedBookingRequest.date),
     cca: savedBookingRequest.cca || "Personal",
     notes: savedBookingRequest.notes,
@@ -134,6 +131,7 @@ const createBookingRequestController = async (req, res, next) => {
     const message = venueBookingRequestMessageBuilder(savedBookingRequest);
     sendMessageToChannel(message);
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log("Channel message not sent");
   }
 
