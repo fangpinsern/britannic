@@ -4,8 +4,8 @@
   "description": "KE Web backend",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "lint": "eslint ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
