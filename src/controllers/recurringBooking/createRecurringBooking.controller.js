@@ -1,18 +1,14 @@
-const { ACCEPTED } = require("http-status");
+const { ACCEPTED, BAD_REQUEST } = require("http-status");
 const RecurringBooking = require("../../models/recurringBooking.model");
 const Venue = require("../../models/venue.model");
 const { convertDateStringToUnix } = require("../../utils/dateToUnix");
+const { errorFormatter } = require("../../utils/errorFormatter");
 
 const createRecurringBookingController = async (req, res, next) => {
-  const body = req.body;
-  const email = body.email;
-  const venueId = body.venueId;
-  const startDate = body.startDate;
-  const endDate = body.endDate;
-  const dayOfTheWeek = body.dayOfTheWeek;
+  const { body } = req;
+  const { email, venueId, startDate, endDate, dayOfTheWeek, notes, cca } =
+    body.email;
   const timingSlots = body.timingSlots.sort();
-  const notes = body.notes;
-  const cca = body.cca;
 
   let isVenueIdValid;
   try {

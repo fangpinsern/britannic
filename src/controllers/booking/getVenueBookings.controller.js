@@ -6,10 +6,8 @@ const {
 } = require("../../utils/dateToUnix");
 
 const getVenueBookingsController = async (req, res, next) => {
-  const query = req.query;
-  const startDate = query.startDate;
-  const endDate = query.endDate;
-  const venueId = query.venueId;
+  const { query } = req;
+  const { startDate, endDate, venueId } = query;
 
   let startDateToUnix;
   try {
@@ -35,11 +33,10 @@ const getVenueBookingsController = async (req, res, next) => {
     return next(err);
   }
 
-  let response = {};
+  const response = {};
   bookings.map((booking) => {
-    const unixDate = booking.date;
-    const timingSlot = booking.timingSlot;
-    const dateString = convertUnixToDateString(unixDate, "yyyyLLdd");
+    const { date, timingSlot } = booking;
+    const dateString = convertUnixToDateString(date, "yyyyLLdd");
     const dateStringExist = response[dateString];
 
     if (!dateStringExist) {
@@ -49,6 +46,7 @@ const getVenueBookingsController = async (req, res, next) => {
       const newArr = [...arr, timingSlot];
       response[dateString] = newArr;
     }
+    return booking;
   });
 
   return res.status(OK).json({ bookings: response });

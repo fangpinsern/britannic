@@ -7,7 +7,6 @@ const {
 } = require("../templates/htmlTemplate");
 const { convertUnixToDateString } = require("../utils/dateToUnix");
 const { mapSlotsToTiming } = require("../utils/mapSlotsToTiming");
-const { checkIfVenueAvailable } = require("./booking.service");
 const { sendEmail } = require("./email.service");
 const {
   instantBookingRequestMessageBuilder,
@@ -22,8 +21,7 @@ const rejectBookingRequestInTheseSlots = async (
 ) => {
   const venue = await Venue.findOne({ _id: venueId });
 
-  const isChildVenue = venue.isChildVenue;
-  console.log(venue.childVenues);
+  const { isChildVenue } = venue;
 
   let searchQuery;
   if (isChildVenue) {
@@ -54,13 +52,15 @@ const rejectBookingRequestInTheseSlots = async (
     return [];
   }
 
-  rejectedBookingRequestIds = [];
-  for (let i = 0; i < requestToReject.length; i++) {
+  const rejectedBookingRequestIds = [];
+  for (let i = 0; i < requestToReject.length; i += 1) {
     const request = requestToReject[i];
     if (request.id.toString() === except) {
+      // eslint-disable-next-line no-continue
       continue;
     }
     if (request.isRejected) {
+      // eslint-disable-next-line no-continue
       continue;
     }
     request.isRejected = true;
@@ -72,9 +72,9 @@ const rejectBookingRequestInTheseSlots = async (
       id: request._id.toString(),
       email: request.email,
       venueName: request.venue.name,
-      timingSlots: request.timingSlots.map((timingSlot) => {
-        return mapSlotsToTiming(timingSlot);
-      }),
+      timingSlots: request.timingSlots.map((timingSlot) =>
+        mapSlotsToTiming(timingSlot)
+      ),
       date: convertUnixToDateString(request.date),
       cca: request.cca || "Personal",
       notes: request.notes,
@@ -101,7 +101,7 @@ const getConflictingBookingRequests = async (
 ) => {
   const venue = await Venue.findOne({ _id: venueId });
 
-  const isChildVenue = venue.isChildVenue;
+  const { isChildVenue } = venue;
 
   let searchQuery;
   if (isChildVenue) {
@@ -131,12 +131,9 @@ const getConflictingBookingRequests = async (
   }
 
   const returnVal = conflictingBookingRequests.filter(
-    (conflictingBookingRequest) => {
-      return (
-        conflictingBookingRequest.id.toString() != except &&
-        !conflictingBookingRequest.isRejected
-      );
-    }
+    (conflictingBookingRequest) =>
+      conflictingBookingRequest.id.toString() !== except &&
+      !conflictingBookingRequest.isRejected
   );
 
   // rejectedBookingRequestIds = [];
@@ -164,13 +161,15 @@ const approveBookingRequestById = async (bookingRequestId) => {
     _id: bookingRequestId,
   });
 
-  const email = bookingRequest.email;
-  const venue = bookingRequest.venue;
-  const date = bookingRequest.date;
-  const bookingTimeSlots = bookingRequest.timingSlots;
-  const notes = bookingRequest.notes;
-  const isApproved = bookingRequest.isApproved;
-  const isRejected = bookingRequest.isRejected;
+  const {
+    email,
+    venue,
+    date,
+    bookingTimeSlots,
+    notes,
+    isApproved,
+    isRejected,
+  } = bookingRequest.email;
 
   if (isApproved) {
     throw new Error(
@@ -186,7 +185,7 @@ const approveBookingRequestById = async (bookingRequestId) => {
 
   const newBookingIds = [];
 
-  for (let i = 0; i < bookingTimeSlots.length; i++) {
+  for (let i = 0; i < bookingTimeSlots.length; i += 1) {
     const timingSlot = bookingTimeSlots[i];
     const newBooking = new Booking({
       email: email,
@@ -238,8 +237,10 @@ const approveBookingRequestById = async (bookingRequestId) => {
     const message = instantBookingRequestMessageBuilder(savedBookingRequest);
     sendMessageToChannel(message);
   } catch (err) {
+    /* eslint-disable no-console */
     console.log(err);
     console.log("Channel message not sent");
+    /* eslint-enable no-console */
   }
 
   return {

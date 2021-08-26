@@ -1,13 +1,13 @@
 const { BAD_REQUEST, ACCEPTED } = require("http-status");
+const fs = require("fs/promises");
 const Venue = require("../../models/venue.model");
 const { errorFormatter } = require("../../utils/errorFormatter");
-const fs = require("fs/promises");
 
 const editVenueController = async (req, res, next) => {
-  const params = req.params;
-  const venueId = params.venueId;
+  const { params } = req;
+  const { venueId } = params;
 
-  const body = req.body;
+  const { body } = req;
 
   let venue;
   try {
@@ -22,35 +22,32 @@ const editVenueController = async (req, res, next) => {
   }
 
   if (body.image) {
-    const image = body.image;
+    const { image } = body;
 
     // move old image out
     if (venue.image) {
       const imageId = venue.image.split("/")[2];
+      const tempStorageRemove = `${__dirname}/../../temp/${imageId}`;
+      const permStorageRemove = `${__dirname}/../../../public/img/${imageId}`;
       try {
-        await fs.rename(
-          __dirname + "/../../../public/img/" + imageId,
-          __dirname + "/../../temp/" + imageId
-        );
+        await fs.rename(permStorageRemove, tempStorageRemove);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.log("File not in public folder");
       }
     }
 
     // move new image in
+    const tempStorage = `${__dirname}/../../temp/${image}`;
+    const permStorage = `${__dirname}/../../../public/img/${image}`;
     try {
-      await fs.rename(
-        __dirname + "/../../temp/" + image,
-        __dirname + "/../../../public/img/" + image
-      );
+      await fs.rename(tempStorage, permStorage);
     } catch (err) {
       return next(err);
     }
 
-    body.image = "/img/" + image;
+    body.image = `/img/${image}`;
   }
-
-  console.log("bODY", body);
 
   let updatedVenue;
   try {

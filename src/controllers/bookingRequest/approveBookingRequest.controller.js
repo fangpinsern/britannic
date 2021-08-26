@@ -21,8 +21,8 @@ const { mapSlotsToTiming } = require("../../utils/mapSlotsToTiming");
 // return
 
 const approveBookingRequestController = async (req, res, next) => {
-  const body = req.body;
-  const bookingRequestId = body.bookingRequestId;
+  const { body } = req;
+  const { bookingRequestId } = body;
 
   let bookingRequest;
   try {
@@ -39,13 +39,8 @@ const approveBookingRequestController = async (req, res, next) => {
     return next(err);
   }
 
-  const email = bookingRequest.email;
-  const venue = bookingRequest.venue;
-  const date = bookingRequest.date;
+  const { email, venue, date, notes, isApproved, isRejected } = bookingRequest;
   const bookingTimeSlots = bookingRequest.timingSlots;
-  const notes = bookingRequest.notes;
-  const isApproved = bookingRequest.isApproved;
-  const isRejected = bookingRequest.isRejected;
 
   if (isApproved) {
     const message =
@@ -80,7 +75,7 @@ const approveBookingRequestController = async (req, res, next) => {
 
   const newBookingIds = [];
 
-  for (let i = 0; i < bookingTimeSlots.length; i++) {
+  for (let i = 0; i < bookingTimeSlots.length; i += 1) {
     const timingSlot = bookingTimeSlots[i];
     const newBooking = new Booking({
       email: email,
@@ -91,6 +86,7 @@ const approveBookingRequestController = async (req, res, next) => {
     });
     let savedBooking;
     try {
+      // if order dont matter, should use map, then promise.all it. To improve the speed
       savedBooking = await newBooking.save();
     } catch (err) {
       return next(err);
@@ -156,6 +152,7 @@ const approveBookingRequestController = async (req, res, next) => {
   } catch (err) {
     const message =
       "Error occured after booking has been approved. Pls check console for more detailed error logs";
+    // eslint-disable-next-line no-console
     console.log(err);
     return next(errorFormatter(message, INTERNAL_SERVER_ERROR));
   }

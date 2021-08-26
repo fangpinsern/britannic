@@ -4,7 +4,7 @@ const { errorFormatter } = require("../../utils/errorFormatter");
 
 // if parent venue invisible, child venue invisible
 const updateVenueVisibilityController = async (req, res, next) => {
-  const venueId = req.params.venueId;
+  const { venueId } = req.params;
 
   let venueFound;
   try {

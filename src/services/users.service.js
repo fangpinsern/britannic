@@ -1,8 +1,9 @@
-const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
+const User = require("../models/user.model");
 
 const removePassword = (userObj) => {
-  delete userObj["password"];
+  // eslint-disable-next-line no-param-reassign
+  delete userObj.password;
 };
 
 const authenticateUser = async (username, password) => {

@@ -1,3 +1,3 @@
-const findOneDataService = async (model, params = {}) => {
-  return await model.findOne({ ...params });
-};
+// const findOneDataService = async (model, params = {}) => {
+//   return await model.findOne({ ...params });
+// };

@@ -10,9 +10,7 @@ const imageRouter = require("./image.routes");
 const router = Router();
 router.use(json());
 
-router.get("/ping", (req, res, next) => {
-  return res.send("Successfully inside routes");
-});
+router.get("/ping", (req, res) => res.send("Successfully inside routes"));
 
 router.use("/auth", authRouter);
 router.use("/venue", venueRouter);

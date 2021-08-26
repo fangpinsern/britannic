@@ -12,8 +12,8 @@ const { errorFormatter } = require("../../utils/errorFormatter");
 const { mapSlotsToTiming } = require("../../utils/mapSlotsToTiming");
 
 const cancelBookingRequestController = async (req, res, next) => {
-  const params = req.params;
-  const bookingRequestId = params.bookingRequestId;
+  const { params } = req;
+  const { bookingRequestId } = params;
 
   let bookingRequest;
   try {
@@ -49,14 +49,15 @@ const cancelBookingRequestController = async (req, res, next) => {
     return next(errorFormatter(message, BAD_REQUEST));
   }
 
-  const bookingIds = bookingRequest.bookingIds;
+  const { bookingIds } = bookingRequest;
   if (bookingIds.length !== 0) {
-    //delete bookings
+    // delete bookings
     const deleteStatus = await Booking.deleteMany({
       _id: {
         $in: bookingIds,
       },
     });
+    // eslint-disable-next-line no-console
     console.log("Delete Status: ", deleteStatus);
   }
 
@@ -81,9 +82,9 @@ const cancelBookingRequestController = async (req, res, next) => {
     id: savedBookingRequest._id.toString(),
     email: savedBookingRequest.email,
     venueName: savedBookingRequest.venue.name,
-    timingSlots: savedBookingRequest.timingSlots.map((timingSlot) => {
-      return mapSlotsToTiming(timingSlot);
-    }),
+    timingSlots: savedBookingRequest.timingSlots.map((timingSlot) =>
+      mapSlotsToTiming(timingSlot)
+    ),
     date: convertUnixToDateString(savedBookingRequest.date),
     cca: savedBookingRequest.cca || "Personal",
     notes: savedBookingRequest.notes,
@@ -107,15 +108,15 @@ const cancelBookingRequestController = async (req, res, next) => {
 
   const pastConflicts = savedBookingRequest.conflictingRequest;
 
-  for (let i = 0; i < pastConflicts.length; i++) {
+  for (let i = 0; i < pastConflicts.length; i += 1) {
     const pastConflict = pastConflicts[i];
     const conflictHtml = pastRequestAvailTemplate({
       id: pastConflict._id.toString(),
       email: pastConflict.email,
       venueName: savedBookingRequest.venue.name,
-      timingSlots: pastConflict.timingSlots.map((timingSlot) => {
-        return mapSlotsToTiming(timingSlot);
-      }),
+      timingSlots: pastConflict.timingSlots.map((timingSlot) =>
+        mapSlotsToTiming(timingSlot)
+      ),
       date: convertUnixToDateString(pastConflict.date),
       cca: pastConflict.cca || "Personal",
       notes: pastConflict.notes,

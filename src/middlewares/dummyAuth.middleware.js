@@ -15,7 +15,8 @@ const dummyAuthMiddleware = (req, res, next) => {
     return next(err);
   }
 
-  console.log("INFO - User is admin");
+  // eslint-disable-next-line no-console
+  console.log("INFO - User is admin hack");
   return next();
 };
 

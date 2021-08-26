@@ -3,8 +3,8 @@ const BookingRequest = require("../../models/bookingRequest.model");
 const { errorFormatter } = require("../../utils/errorFormatter");
 
 const getBookingRequestInfo = async (req, res, next) => {
-  const query = req.query;
-  const bookingRequestId = query.bookingRequestId;
+  const { query } = req;
+  const { bookingRequestId } = query;
 
   let bookingRequest;
   try {

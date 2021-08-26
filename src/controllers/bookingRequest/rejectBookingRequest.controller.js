@@ -7,8 +7,8 @@ const { errorFormatter } = require("../../utils/errorFormatter");
 const { mapSlotsToTiming } = require("../../utils/mapSlotsToTiming");
 
 const rejectBookingRequestController = async (req, res, next) => {
-  const body = req.body;
-  const bookingRequestId = body.bookingRequestId;
+  const { body } = req;
+  const { bookingRequestId } = body;
 
   let bookingRequest;
   try {
@@ -23,13 +23,7 @@ const rejectBookingRequestController = async (req, res, next) => {
     return next(err);
   }
 
-  const email = bookingRequest.email;
-  const venue = bookingRequest.venue;
-  const date = bookingRequest.date;
-  const bookingTimeSlots = bookingRequest.timingSlots;
-  const notes = bookingRequest.notes;
-  const isApproved = bookingRequest.isApproved;
-  const isRejected = bookingRequest.isRejected;
+  const { email, isApproved, isRejected } = bookingRequest.email;
 
   if (isApproved) {
     const message =
@@ -62,9 +56,9 @@ const rejectBookingRequestController = async (req, res, next) => {
     id: savedBookingRequest._id.toString(),
     email: savedBookingRequest.email,
     venueName: savedBookingRequest.venue.name,
-    timingSlots: savedBookingRequest.timingSlots.map((timingSlot) => {
-      return mapSlotsToTiming(timingSlot);
-    }),
+    timingSlots: savedBookingRequest.timingSlots.map((timingSlot) =>
+      mapSlotsToTiming(timingSlot)
+    ),
     date: convertUnixToDateString(savedBookingRequest.date),
     cca: savedBookingRequest.cca || "Personal",
     notes: savedBookingRequest.notes,

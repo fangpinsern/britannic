@@ -25,7 +25,6 @@ const {
   createVenueSchema,
   createChildVenueSchema,
   updateVenueVisibilitySchema,
-  editVenueSchema,
   updateVenueInstantBookSchema,
 } = require("../schema/venueSchema");
 const { validationHelper } = require("../utils/requestValidationTool");
@@ -34,9 +33,7 @@ const router = Router();
 
 router.use(json());
 
-router.get("/ping", (req, res, next) => {
-  return res.send("Successfully inside venue routes");
-});
+router.get("/ping", (req, res) => res.send("Successfully inside venue routes"));
 
 router.get("/search", getAllVenueController);
 
