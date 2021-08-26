@@ -1,8 +1,9 @@
 const { BAD_REQUEST, ACCEPTED } = require("http-status");
 const Venue = require("../../models/venue.model");
+const { errorFormatter } = require("../../utils/errorFormatter");
 
 const updateVenueInstantBookController = async (req, res, next) => {
-  const venueId = req.params.venueId;
+  const { venueId } = req.params;
 
   let venueFound;
   try {

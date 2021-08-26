@@ -3,8 +3,8 @@ const Venue = require("../../models/venue.model");
 const { errorFormatter } = require("../../utils/errorFormatter");
 
 const createChildVenueController = async (req, res, next) => {
-  const params = req.params;
-  const parentId = params.parentId;
+  const { params } = req;
+  const { parentId } = params;
 
   let findParentVenue;
   try {
@@ -19,11 +19,9 @@ const createChildVenueController = async (req, res, next) => {
     return next(err);
   }
 
-  const body = req.body;
-  const name = body.name;
-  const capacity = body.capacity;
-  const openingHours = findParentVenue.openingHours;
-  const priorityEmails = findParentVenue.priorityEmails;
+  const { body } = req;
+  const { name, capacity } = body.name;
+  const { openingHours, priorityEmails } = findParentVenue.openingHours;
   const description = body.description || findParentVenue.description;
   const image = body.image || findParentVenue.image;
   const parentVenue = findParentVenue.id;
@@ -47,14 +45,13 @@ const createChildVenueController = async (req, res, next) => {
     return next(err);
   }
 
-  const childVenues = findParentVenue.childVenues;
+  const { childVenues } = findParentVenue;
   childVenues.push(savedChildVenue.id);
 
   findParentVenue.childVenues = childVenues;
 
-  let savedParentVenue;
   try {
-    savedParentVenue = await findParentVenue.save();
+    await findParentVenue.save();
   } catch (err) {
     return next(err);
   }

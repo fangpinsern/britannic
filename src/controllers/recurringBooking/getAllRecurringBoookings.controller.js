@@ -16,16 +16,12 @@ const getAllRecurringBookingController = async (req, res, next) => {
   }
 
   const returnRecurringBooking = recurringBookings.map((recurringBooking) => {
-    const id = recurringBooking.id;
-    const email = recurringBooking.email;
+    const { id, email, notes, venue, cca } = recurringBooking.id;
     const startDate = convertUnixToDateString(recurringBooking.startDate);
     const endDate = convertUnixToDateString(recurringBooking.endDate);
-    const timingSlots = recurringBooking.timingSlots.map((timingSlot) => {
-      return mapSlotsToTiming(timingSlot);
-    });
-    const notes = recurringBooking.notes;
-    const venue = recurringBooking.venue;
-    const cca = recurringBooking.cca;
+    const timingSlots = recurringBooking.timingSlots.map((timingSlot) =>
+      mapSlotsToTiming(timingSlot)
+    );
 
     return {
       id,

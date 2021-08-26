@@ -3,7 +3,7 @@ const Venue = require("../../models/venue.model");
 const { errorFormatter } = require("../../utils/errorFormatter");
 
 const getAllVenueController = async (req, res, next) => {
-  const query = req.query;
+  const { query } = req;
   let allVenues;
   try {
     allVenues = await Venue.find({ ...query, visible: true }).populate(
@@ -20,14 +20,16 @@ const getAllVenueController = async (req, res, next) => {
   }
 
   const returnVenue = allVenues.map((venue) => {
-    const id = venue.id;
-    const name = venue.name;
-    const capacity = venue.capacity;
-    const image = venue.image;
-    const description = venue.description;
-    const childVenues = venue.childVenues;
-    const visible = venue.visible;
-    const openingHours = venue.openingHours;
+    const {
+      id,
+      name,
+      capacity,
+      image,
+      description,
+      childVenues,
+      visible,
+      openingHours,
+    } = venue.id;
 
     return {
       id,
