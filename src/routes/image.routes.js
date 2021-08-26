@@ -8,20 +8,20 @@ const { dummyAuthMiddleware } = require("../middlewares/dummyAuth.middleware");
 
 const router = Router();
 
-const upload = multer({ dest: __dirname + "/../temp" });
+const multerDestination = `${__dirname}/../temp`;
+const upload = multer({ dest: multerDestination });
 
 router.use(json());
 
-router.get("/ping", (req, res, next) => {
-  return res.send("Successfully inside image routes");
-});
+router.get("/ping", (req, res) => res.send("Successfully inside image routes"));
 
 router.post(
   "/upload",
   dummyAuthMiddleware,
   upload.single("image"),
-  (req, res, next) => {
-    const file = req.file;
+  (req, res) => {
+    const { file } = req.file;
+    // eslint-disable-next-line no-console
     console.log(file);
     res.status(ACCEPTED).json({ filename: file.filename });
   }

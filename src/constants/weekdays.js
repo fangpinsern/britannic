@@ -17,3 +17,5 @@ const numberToWeekday = {
   6: "Saturday",
   7: "Sunday",
 };
+
+module.exports = { numberToWeekday, weekdayToNumber };

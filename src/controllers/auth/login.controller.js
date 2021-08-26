@@ -1,4 +1,4 @@
-// const bcrypt = require("bcrypt");
+/* eslint-disable no-console */
 const {
   UNAUTHORIZED,
   INTERNAL_SERVER_ERROR,
@@ -13,10 +13,9 @@ const { authenticateUser } = require("../../services/users.service");
 const { errorFormatter } = require("../../utils/errorFormatter");
 
 const loginController = async (req, res, next) => {
-  const body = req.body;
+  const { body } = req.body;
 
-  const username = body.username;
-  const password = body.password;
+  const { username, password } = body.username;
 
   console.log("INFO - Finding user with username", username);
 

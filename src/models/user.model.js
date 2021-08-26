@@ -15,6 +15,7 @@ const UserSchema = new Schema(
   }
 );
 
+// eslint-disable-next-line func-names
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();

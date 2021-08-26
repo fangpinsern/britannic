@@ -8,11 +8,8 @@ const { createUser, getUser } = require("../../services/users.service");
 const { errorFormatter } = require("../../utils/errorFormatter");
 
 const registerController = async (req, res, next) => {
-  const body = req.body;
-  console.log("INFO - Body is valid");
-  const email = body.email;
-  const username = body.username;
-  const password = body.password;
+  const { body } = req;
+  const { email, username, password } = body.email;
 
   let userExist = false;
   try {
@@ -29,6 +26,7 @@ const registerController = async (req, res, next) => {
     return next(err);
   }
 
+  // eslint-disable-next-line no-console
   console.log("INFO - Creating new user");
 
   let newUser;
@@ -43,10 +41,10 @@ const registerController = async (req, res, next) => {
     token = jwt.sign(
       {
         user: {
-          id: user._id,
-          username: user.username,
-          email: user.email,
-          isAdmin: user.isAdmin,
+          id: newUser._id,
+          username: newUser.username,
+          email: newUser.email,
+          isAdmin: newUser.isAdmin,
         },
       },
       JWT_SECRET_KEY,
@@ -56,7 +54,7 @@ const registerController = async (req, res, next) => {
     return next(err);
   }
 
-  returnUser = { username: newUser.username, email: newUser.email };
+  const returnUser = { username: newUser.username, email: newUser.email };
 
   return res.status(CREATED).json({ token, user: returnUser });
 };

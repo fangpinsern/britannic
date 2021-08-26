@@ -9,7 +9,7 @@ const { getDayOfTheWeekInt } = require("../utils/dateToUnix");
 const checkIfVenueAvailable = async (venueId, unixDate, slots = []) => {
   const venue = await Venue.findOne({ _id: venueId });
 
-  const isChildVenue = venue.isChildVenue;
+  const { isChildVenue } = venue;
 
   let searchQuery;
   let recurringBookingQuery;
@@ -26,8 +26,6 @@ const checkIfVenueAvailable = async (venueId, unixDate, slots = []) => {
       dayOfTheWeek: getDayOfTheWeekInt(unixDate),
       timingSlots: { $in: slots },
     };
-
-    console.log(recurringBookingQuery);
   } else {
     searchQuery = {
       venue: { $in: [...venue.childVenues, venueId] },

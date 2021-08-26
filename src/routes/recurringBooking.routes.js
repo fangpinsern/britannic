@@ -15,9 +15,9 @@ const router = Router();
 
 router.use(json());
 
-router.get("/ping", (req, res, next) => {
-  return res.send("Successfully inside recurring booking routes");
-});
+router.get("/ping", (req, res) =>
+  res.send("Successfully inside recurring booking routes")
+);
 
 router.get("/search", dummyAuthMiddleware, getAllRecurringBookingController);
 

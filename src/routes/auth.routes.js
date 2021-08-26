@@ -14,9 +14,7 @@ const router = Router();
 
 router.use(json());
 
-router.get("/ping", (req, res, next) => {
-  return res.send("Successfully inside auth routes");
-});
+router.get("/ping", (req, res) => res.send("Successfully inside auth routes"));
 
 router.post("/login", validationHelper(loginSchema, "body"), loginController);
 router.post(
@@ -29,7 +27,7 @@ router.get(
   "/auth-ping",
   tokenValidationMiddleware,
   isAdminMiddleware,
-  (req, res, next) => {
+  (req, res) => {
     res.json({ ...req.user });
   }
 );

@@ -11,21 +11,20 @@ const bot = new TelegramBot(token, { polling: true });
 
 const sendMessageToChannel = (message) => {
   bot.sendMessage("-1001589190063", message).catch((err) => {
-    //todo move this id to env
-    console.log("Channel message not sent");
+    // TODO move this id to env
+    // eslint-disable-next-line no-console
+    console.log("Channel message not sent", err);
   });
 };
 
 const venueBookingRequestMessageBuilder = (bookingRequest) => {
-  const email = bookingRequest.email;
+  const { email, notes } = bookingRequest;
   const venueName = bookingRequest.venue.name;
   const date = convertUnixToDateString(bookingRequest.date);
-  const timeSlots = bookingRequest.timingSlots.map((timeSlot) => {
-    return timingSlotNumberToTimingMapping[timeSlot];
-  });
+  const timeSlots = bookingRequest.timingSlots.map(
+    (timeSlot) => timingSlotNumberToTimingMapping[timeSlot]
+  );
   const cca = bookingRequest.cca || "Personal";
-
-  const notes = bookingRequest.notes;
 
   const returnMessage = `[BOOKING REQUEST]\nEmail: ${email}\ncca: ${cca}\nvenueName: ${venueName}\ndate: ${date}\ntimeSlots: ${timeSlots}\nnotes: ${notes} `;
 
@@ -33,15 +32,13 @@ const venueBookingRequestMessageBuilder = (bookingRequest) => {
 };
 
 const instantBookingRequestMessageBuilder = (bookingRequest) => {
-  const email = bookingRequest.email;
+  const { email, notes } = bookingRequest;
   const venueName = bookingRequest.venue.name;
   const date = convertUnixToDateString(bookingRequest.date);
-  const timeSlots = bookingRequest.timingSlots.map((timeSlot) => {
-    return timingSlotNumberToTimingMapping[timeSlot];
-  });
+  const timeSlots = bookingRequest.timingSlots.map(
+    (timeSlot) => timingSlotNumberToTimingMapping[timeSlot]
+  );
   const cca = bookingRequest.cca || "Personal";
-
-  const notes = bookingRequest.notes;
 
   const returnMessage = `[INSTANT APPROVAL]\nEmail: ${email}\ncca: ${cca}\nvenueName: ${venueName}\ndate: ${date}\ntimeSlots: ${timeSlots}\nnotes: ${notes} `;
 
