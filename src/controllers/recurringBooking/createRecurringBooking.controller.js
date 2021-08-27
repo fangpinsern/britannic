@@ -6,8 +6,7 @@ const { errorFormatter } = require("../../utils/errorFormatter");
 
 const createRecurringBookingController = async (req, res, next) => {
   const { body } = req;
-  const { email, venueId, startDate, endDate, dayOfTheWeek, notes, cca } =
-    body.email;
+  const { email, venueId, startDate, endDate, dayOfTheWeek, notes, cca } = body;
   const timingSlots = body.timingSlots.sort();
 
   let isVenueIdValid;

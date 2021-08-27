@@ -19,7 +19,7 @@ const getAllVenueAdminController = async (req, res, next) => {
 
   const returnVenue = allVenues.map((venue) => {
     const { id, name, capacity, image, description, visible, openingHours } =
-      venue.id;
+      venue;
 
     return {
       id,

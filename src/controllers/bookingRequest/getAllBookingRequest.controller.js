@@ -30,7 +30,7 @@ const getAllBookingRequestController = async (req, res, next) => {
 
   const returnBookingRequest = allBookingRequest.map((bookingRequest) => {
     const { id, email, isApproved, isRejected, notes, venue, cca } =
-      bookingRequest.id;
+      bookingRequest;
     const date = convertUnixToDateString(bookingRequest.date);
     const timingSlots = bookingRequest.timingSlots.map((timingSlot) =>
       mapSlotsToTiming(timingSlot)

@@ -29,7 +29,7 @@ const getAllVenueController = async (req, res, next) => {
       childVenues,
       visible,
       openingHours,
-    } = venue.id;
+    } = venue;
 
     return {
       id,
