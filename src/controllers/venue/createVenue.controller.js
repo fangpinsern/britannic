@@ -5,18 +5,20 @@ const Venue = require("../../models/venue.model");
 const createVenueController = async (req, res, next) => {
   const { body } = req;
   const { name, capacity, openingHours, priorityEmails, description, image } =
-    body.name;
+    body;
 
   // move image to perm storage
-  const tempStorage = `${__dirname}/../../temp/${image}`;
-  const permStorage = `${__dirname}/../../../public/img/${image}`;
-  fs.rename(tempStorage, permStorage, (err) => {
-    if (err) {
-      return next(err);
-    }
+  if (image) {
+    const tempStorage = `${__dirname}/../../temp/${image}`;
+    const permStorage = `${__dirname}/../../../public/img/${image}`;
+    fs.rename(tempStorage, permStorage, (err) => {
+      if (err) {
+        return next(err);
+      }
 
-    return true;
-  });
+      return true;
+    });
+  }
 
   const newVenue = new Venue({
     name: name,
