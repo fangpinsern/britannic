@@ -20,8 +20,8 @@ const createChildVenueController = async (req, res, next) => {
   }
 
   const { body } = req;
-  const { name, capacity } = body.name;
-  const { openingHours, priorityEmails } = findParentVenue.openingHours;
+  const { name, capacity } = body;
+  const { openingHours, priorityEmails } = findParentVenue;
   const description = body.description || findParentVenue.description;
   const image = body.image || findParentVenue.image;
   const parentVenue = findParentVenue.id;
