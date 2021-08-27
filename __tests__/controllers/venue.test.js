@@ -1,4 +1,4 @@
-const { ACCEPTED, INTERNAL_SERVER_ERROR } = require("http-status");
+const { ACCEPTED, INTERNAL_SERVER_ERROR, OK } = require("http-status");
 const mongoose = require("mongoose");
 // eslint-disable-next-line node/no-unpublished-require
 const request = require("supertest");
@@ -68,5 +68,20 @@ describe("Venue APIs", () => {
     const { venue } = response.body;
     expect(response.statusCode).toBe(ACCEPTED);
     expect(venue.name).toBe(childVenue.name);
+  });
+
+  it("Get All Parent Venues", async () => {
+    const response = await request(app)
+      .get(`${venueRoute}/search`)
+      .set("Content-Type", "application/json");
+
+    const { venues } = response.body;
+
+    expect(response.statusCode).toBe(OK);
+    expect(venues[0]).toBeDefined();
+
+    const venue = venues[0];
+
+    expect(venue.name).toBe(testVenue.name);
   });
 });
