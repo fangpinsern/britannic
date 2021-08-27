@@ -7,7 +7,7 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "lint": "eslint ./",
-    "test": "jest --forceExit"
+    "test": "jest --coverage --forceExit"
   },
   "engines": {
     "node": ">=8.3.0"

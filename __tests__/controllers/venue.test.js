@@ -12,7 +12,7 @@ const testVenue = {
   description: "just a place to play tennis",
 };
 
-const childVenue = {
+const testChildVenue = {
   name: "Tennis Court A",
   description: "Left court",
   capacity: 1,
@@ -61,13 +61,13 @@ describe("Venue APIs", () => {
   it("Add child venue to parent venue", async () => {
     const response = await request(app)
       .post(`${venueRoute}/childVenue/${parentVenue}`)
-      .send(childVenue)
+      .send(testChildVenue)
       .set("Content-Type", "application/json")
       .set("Authorization", DUMMY_AUTH);
 
     const { venue } = response.body;
     expect(response.statusCode).toBe(ACCEPTED);
-    expect(venue.name).toBe(childVenue.name);
+    expect(venue.name).toBe(testChildVenue.name);
   });
 
   it("Get All Parent Venues", async () => {
@@ -83,5 +83,24 @@ describe("Venue APIs", () => {
     const venue = venues[0];
 
     expect(venue.name).toBe(testVenue.name);
+  });
+
+  it("Parent venue contains child", async () => {
+    const response = await request(app)
+      .get(`${venueRoute}/search`)
+      .set("Content-Type", "application/json");
+
+    const { venues } = response.body;
+
+    expect(response.statusCode).toBe(OK);
+
+    const venue = venues[0];
+    expect(venue).toBeDefined();
+
+    expect(venue.name).toBe(testVenue.name);
+
+    const childVenue = venue.childVenues[0];
+    expect(childVenue).toBeDefined();
+    expect(childVenue.name).toBe(testChildVenue.name);
   });
 });
