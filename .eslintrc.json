@@ -15,5 +15,13 @@
     "no-underscore-dangle": "off",
     "no-await-in-loop": "off",
     "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.test.js", "**/*.spec.jsx"],
+      "env": {
+        "jest": true
+      }
+    }
+  ]
 }
